@@ -105,6 +105,10 @@ node web/build.js
 
 It writes `web/index.html`, a single self-contained page. The build script also prints a check against the Power BI figures (national value, number of ranked municipalities, median and top three).
 
+## License
+
+The code, Power BI report and documentation are under the [MIT License](LICENSE). The data is not: the appraisal figures belong to INE (Statistics Portugal) and the municipal boundaries to Direção-Geral do Território, and any reuse must credit those sources.
+
 ---
 
 ## Português
@@ -131,3 +135,7 @@ O tratamento dos dados está explicado passo a passo em [docs/etl-habitacao.html
 5. Clica em **Atualizar**.
 
 A estrutura do repositório, o modelo de dados e as medidas principais estão descritos na secção em inglês acima.
+
+### Licença
+
+O código, o relatório Power BI e a documentação estão sob a [licença MIT](LICENSE). Os dados não: os valores de avaliação são do INE e os limites municipais da Direção-Geral do Território, e qualquer reutilização tem de citar essas fontes.
