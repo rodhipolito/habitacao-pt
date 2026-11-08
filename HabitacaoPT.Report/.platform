@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "HabitacaoPT"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "3d1c61fb-a0c6-4929-8bdc-2bacd069f09c"
+  }
+}

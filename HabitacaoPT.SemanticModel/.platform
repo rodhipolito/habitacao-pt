@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "HabitacaoPT"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "878161f9-471a-4087-b8e9-70f8a7fb1b1a"
+  }
+}

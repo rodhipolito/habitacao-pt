@@ -1,0 +1,60 @@
+table fact_avaliacao
+	lineageTag: c438744d-32f5-46a7-ad68-0e2cdf5580fd
+
+	column cod_geo
+		dataType: string
+		lineageTag: f59cbaee-c8a6-4551-abed-ddd7416e672b
+		summarizeBy: none
+		sourceColumn: cod_geo
+
+	column mes
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 71a35b65-c48c-4fbd-9535-e5603f400bcf
+		summarizeBy: none
+		sourceColumn: mes
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column tipo_construcao
+		dataType: string
+		lineageTag: acd80a85-7742-4dad-a565-37f279156c0e
+		summarizeBy: none
+		sourceColumn: tipo_construcao
+
+	column preco_m2
+		dataType: int64
+		formatString: 0
+		lineageTag: 06ae0e6d-693d-45f7-820e-b2cd83c7c1fb
+		summarizeBy: none
+		sourceColumn: preco_m2
+
+	column n_avaliacoes
+		dataType: int64
+		formatString: 0
+		lineageTag: 6077d5d0-faf8-4d0a-9ced-12da181c7548
+		summarizeBy: none
+		sourceColumn: n_avaliacoes
+
+	column preco_sem_valor
+		dataType: string
+		lineageTag: b274b4ad-e81e-409c-98bd-3659e4d3eb4a
+		summarizeBy: none
+		sourceColumn: preco_sem_valor
+
+	column n_sem_valor
+		dataType: string
+		lineageTag: 01e63c73-be03-45db-85ce-ca207ba00994
+		summarizeBy: none
+		sourceColumn: n_sem_valor
+
+	partition fact_avaliacao = m
+		mode: import
+		source =
+				let
+					Fonte = Csv.Document(File.Contents(Pasta & "fact_avaliacao.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+					Tipos = Table.TransformColumnTypes(Cabecalho, {{"cod_geo", type text},{"mes", type date},{"tipo_construcao", type text},{"preco_m2", Int64.Type},{"n_avaliacoes", Int64.Type},{"preco_sem_valor", type text},{"n_sem_valor", type text}}, "en-US")
+				in
+					Tipos
+

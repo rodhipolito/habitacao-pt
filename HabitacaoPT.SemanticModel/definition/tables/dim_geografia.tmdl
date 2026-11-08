@@ -1,0 +1,67 @@
+table dim_geografia
+	lineageTag: 4b997392-6520-4957-8409-e102c13e0873
+
+	column cod_geo
+		dataType: string
+		lineageTag: 1c6dac05-3c2b-4f0b-82c8-69f05372aac6
+		summarizeBy: none
+		sourceColumn: cod_geo
+
+	column nome_geo
+		dataType: string
+		lineageTag: dd08c5c3-d95c-47be-9434-8aeea6f6bf56
+		summarizeBy: none
+		sourceColumn: nome_geo
+
+	column nivel
+		dataType: string
+		lineageTag: 44a8e40c-62f4-4298-a8ef-5645455901e4
+		summarizeBy: none
+		sourceColumn: nivel
+
+	column cod_nuts3
+		dataType: string
+		lineageTag: cd10c79c-791e-47d7-8098-42656c7d6fb2
+		summarizeBy: none
+		sourceColumn: cod_nuts3
+
+	column cod_nuts2
+		dataType: string
+		lineageTag: b0b85a08-3ba4-4b76-80d6-84fe242add9a
+		summarizeBy: none
+		sourceColumn: cod_nuts2
+
+	column cod_nuts1
+		dataType: string
+		lineageTag: a331b77a-f965-4b67-8e1d-2c2d83d8c325
+		summarizeBy: none
+		sourceColumn: cod_nuts1
+
+	column nome_nuts3
+		dataType: string
+		lineageTag: d0d1ad02-c017-4fc1-8e4c-0bd607edef16
+		summarizeBy: none
+		sourceColumn: nome_nuts3
+
+	column nome_nuts2
+		dataType: string
+		lineageTag: d1b2b337-80ed-401a-9869-18b5ecd3752a
+		summarizeBy: none
+		sourceColumn: nome_nuts2
+
+	column local_mapa = dim_geografia[nome_geo] & ", " & dim_geografia[nome_nuts2] & ", Portugal"
+		dataType: string
+		lineageTag: 63ed72b4-19ad-48cd-8e19-fdf102f35237
+		dataCategory: Place
+		summarizeBy: none
+
+	partition dim_geografia = m
+		mode: import
+		source =
+				let
+					Fonte = Csv.Document(File.Contents(Pasta & "dim_geografia.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+					Tipos = Table.TransformColumnTypes(Cabecalho, {{"cod_geo", type text},{"nome_geo", type text},{"nivel", type text},{"cod_nuts3", type text},{"cod_nuts2", type text},{"cod_nuts1", type text},{"nome_nuts3", type text},{"nome_nuts2", type text}}, "en-US")
+				in
+					Tipos
+

@@ -1,0 +1,3 @@
+Abrir: duplo clique em HabitacaoPT.pbip (Power BI Desktop, funcionalidade "Power BI Project" ativa).
+Dados: pasta "dados". Se mudares a pasta, edita o parâmetro Pasta (Transformar dados > Pasta).
+Medidas: tabela _Medidas (copia legível em medidas.dax).

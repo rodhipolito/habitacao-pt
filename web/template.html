@@ -1,0 +1,611 @@
+<title>Habitação em Portugal</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Valor mediano de avaliação bancária da habitação em Portugal, por município, com dados do INE. Median bank appraisal value of housing in Portugal by municipality.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: masthead com seletor de idioma, barra de controlos fixa, faixa de indicadores, evolução | mapa, ranking a toda a largura. */
+:root {
+  --bg: #f4f7fa;
+  --surface: #ffffff;
+  --ink: #13202c;
+  --muted: #5a6b7b;
+  --line: #d9e2ea;
+  --accent: #1f4fa3;
+  --accent-soft: rgba(31, 79, 163, 0.10);
+  --seq-lo: #dce9f7;
+  --seq-hi: #0b3a8c;
+  --na: #e8edf2;
+  --compare: #8796a5;
+  --warn: #9a5b00;
+  --warn-soft: #fbeedb;
+  --display: "Archivo", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d141b; --surface: #141e28; --ink: #e5ecf2; --muted: #92a3b4; --line: #25333f;
+    --accent: #84aefc; --accent-soft: rgba(132, 174, 252, 0.14); --seq-lo: #1c2f45; --seq-hi: #9cc8ff;
+    --na: #1b2631; --compare: #7d8d9d; --warn: #f2b45c; --warn-soft: #3a2a12; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d141b; --surface: #141e28; --ink: #e5ecf2; --muted: #92a3b4; --line: #25333f;
+  --accent: #84aefc; --accent-soft: rgba(132, 174, 252, 0.14); --seq-lo: #1c2f45; --seq-hi: #9cc8ff;
+  --na: #1b2631; --compare: #7d8d9d; --warn: #f2b45c; --warn-soft: #3a2a12; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 15px/1.5 var(--body);
+  -webkit-font-smoothing: antialiased;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap {
+  max-width: 1240px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.num { font-variant-numeric: tabular-nums; }
+h1, h2, h3 { font-family: var(--display); font-stretch: 85%; text-wrap: balance; margin: 0; }
+
+.masthead { padding-block: 32px 20px; display: grid; gap: 12px; }
+.topline { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.eyebrow { font: 500 12px/1.3 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.lang { display: inline-flex; border: 1px solid var(--line); border-radius: 99px; overflow: hidden; background: var(--surface); }
+.lang button {
+  font: 500 12px/1 var(--mono); letter-spacing: 0.06em; color: var(--muted); background: transparent;
+  border: 0; padding: 7px 12px; cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.masthead h1 { font-size: clamp(30px, 5vw, 52px); font-weight: 800; line-height: 1.02; letter-spacing: -0.01em; }
+.masthead h1 span { color: var(--accent); }
+.lede { max-width: 66ch; color: var(--muted); margin: 0; font-size: 16px; }
+
+.controls {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(8px);
+  border-block: 1px solid var(--line);
+}
+.controls .wrap { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: end; padding-block: 12px; }
+.field { display: grid; gap: 4px; min-width: 0; }
+.field > label, .field > .label { font: 500 11px/1 var(--mono); letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); }
+select, input[type="search"] {
+  font: 500 14px/1.2 var(--body); color: var(--ink); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; min-width: 0; max-width: 100%;
+}
+select:focus-visible, input:focus-visible, button:focus-visible, tr:focus-visible, path:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+#f-local { width: 240px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.seg button {
+  font: 500 14px/1.2 var(--body); color: var(--muted); background: transparent; border: 0;
+  padding: 8px 12px; cursor: pointer;
+}
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-checked="true"] { background: var(--accent); color: var(--surface); }
+.range { display: flex; align-items: center; gap: 10px; }
+.range input { width: 150px; accent-color: var(--accent); }
+.range output { font: 500 14px/1 var(--mono); min-width: 3ch; }
+
+main { display: grid; gap: 28px; padding-block: 24px 48px; }
+.kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.kpi { background: var(--surface); padding: 16px 18px; display: grid; gap: 4px; align-content: start; }
+.kpi .k-label { font-size: 13px; color: var(--muted); }
+.kpi .k-value { font: 700 30px/1.1 var(--display); font-stretch: 85%; font-variant-numeric: tabular-nums; }
+.kpi .k-value small { font: 500 14px var(--body); color: var(--muted); margin-left: 4px; }
+.kpi .k-sub { font-size: 12.5px; color: var(--muted); }
+.chip { justify-self: start; font: 500 11.5px/1.2 var(--body); padding: 4px 8px; border-radius: 99px; background: var(--warn-soft); color: var(--warn); }
+
+.duo { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; display: grid; gap: 12px; min-width: 0; }
+.panel-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px; }
+.panel h2 { font-size: 21px; font-weight: 700; }
+.panel .note { font-size: 13px; color: var(--muted); margin: 0; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12.5px; color: var(--muted); }
+.legend i { display: inline-block; width: 18px; height: 0; border-top: 2.5px solid var(--accent); vertical-align: middle; margin-right: 6px; }
+.legend i.cmp { border-top: 2px dashed var(--compare); }
+.legend i.dot { width: 9px; height: 9px; border: 2px solid var(--accent); border-radius: 50%; background: var(--surface); }
+.linkbtn { font: 500 13px var(--body); color: var(--accent); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+
+#chart { position: relative; width: 100%; height: 300px; }
+#chart svg, #map svg { display: block; width: 100%; height: auto; overflow: visible; }
+#chart text, #map text { font-family: var(--body); }
+.axis text { fill: var(--muted); font-size: 11px; }
+.grid line { stroke: var(--line); }
+#map { position: relative; }
+.map-legend { display: flex; align-items: center; gap: 10px; font: 500 12px var(--mono); color: var(--muted); flex-wrap: wrap; }
+.map-legend .bar { flex: 1 1 80px; height: 10px; border-radius: 3px; max-width: 220px; }
+.map-legend .na { width: 14px; height: 10px; border-radius: 2px; background: var(--na); border: 1px solid var(--line); }
+
+.tip {
+  position: absolute; pointer-events: none; z-index: 3; background: var(--ink); color: var(--bg);
+  padding: 8px 10px; border-radius: 8px; font-size: 12.5px; line-height: 1.4; min-width: 150px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+.tip strong { display: block; font-size: 13px; }
+.tip .row { display: flex; justify-content: space-between; gap: 12px; font-variant-numeric: tabular-nums; }
+
+.rank-tools { display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: center; justify-content: space-between; }
+.rank-stats { display: flex; gap: 20px; font-size: 13px; color: var(--muted); }
+.rank-stats b { font: 700 18px var(--display); color: var(--ink); font-variant-numeric: tabular-nums; margin-right: 4px; }
+#f-search { width: 240px; }
+.table-scroll { overflow: auto; max-height: 560px; border: 1px solid var(--line); border-radius: 8px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 680px; }
+thead th {
+  position: sticky; top: 0; z-index: 1; background: var(--surface); text-align: left;
+  font: 500 11px/1.2 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted);
+  padding: 10px 12px; border-bottom: 1px solid var(--line);
+}
+th.r, td.r { text-align: right; }
+tbody td { padding: 8px 12px; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+tbody tr { cursor: pointer; }
+tbody tr:hover { background: var(--accent-soft); }
+tbody tr[aria-selected="true"] { background: var(--accent-soft); box-shadow: inset 3px 0 0 var(--accent); }
+td.pos { font: 500 13px var(--mono); color: var(--muted); width: 3.5em; }
+td.mun { font-weight: 600; }
+td.reg { color: var(--muted); }
+.vbar { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
+.vbar span { display: block; height: 8px; border-radius: 2px; background: var(--accent); opacity: 0.75; }
+.empty { padding: 24px; text-align: center; color: var(--muted); }
+
+footer { border-top: 1px solid var(--line); padding-block: 20px 40px; font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
+footer p { margin: 0; max-width: 90ch; }
+
+@media (max-width: 1000px) {
+  .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .duo { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 620px) {
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .kpi .k-value { font-size: 25px; }
+  .controls { position: static; }
+  #f-local, #f-search { width: 100%; }
+  .field { flex: 1 1 100%; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  #map path.shape { transition: fill 0.25s ease; }
+}
+</style>
+<!--__BODY__-->
+<header class="wrap masthead">
+  <div class="topline">
+    <div class="eyebrow" data-i18n="eyebrow"></div>
+    <div class="lang" role="group" aria-label="Idioma / Language">
+      <button type="button" data-lang="pt" aria-pressed="true">PT</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+  <h1 data-i18n-html="h1"></h1>
+  <p class="lede" data-i18n="lede"></p>
+</header>
+
+<div class="controls">
+  <div class="wrap">
+    <div class="field">
+      <label for="f-local" data-i18n="local"></label>
+      <select id="f-local"></select>
+    </div>
+    <div class="field">
+      <span class="label" id="l-tipo" data-i18n="tipo"></span>
+      <div class="seg" role="radiogroup" aria-labelledby="l-tipo" id="f-tipo">
+        <button type="button" role="radio" data-tipo="Total" aria-checked="true" data-i18n="tTotal"></button>
+        <button type="button" role="radio" data-tipo="Apartamentos" aria-checked="false" data-i18n="tApartamentos"></button>
+        <button type="button" role="radio" data-tipo="Moradias" aria-checked="false" data-i18n="tMoradias"></button>
+      </div>
+    </div>
+    <div class="field">
+      <label for="f-mes" data-i18n="mes"></label>
+      <select id="f-mes"></select>
+    </div>
+    <div class="field">
+      <label for="f-min" data-i18n="min"></label>
+      <div class="range"><input type="range" id="f-min" min="0" max="400" step="10" value="150"><output id="o-min" for="f-min">150</output></div>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <section class="kpis" data-i18n-aria="kpisAria">
+    <div class="kpi"><span class="k-label" data-i18n="kPreco"></span><span class="k-value" id="k-preco">–</span><span class="k-sub" id="k-preco-sub"></span><span class="chip" id="k-chip" hidden></span></div>
+    <div class="kpi"><span class="k-label" data-i18n="kYoy"></span><span class="k-value" id="k-yoy">–</span><span class="k-sub" id="k-yoy-sub"></span></div>
+    <div class="kpi"><span class="k-label" data-i18n="kPer"></span><span class="k-value" id="k-per">–</span><span class="k-sub" id="k-per-sub"></span></div>
+    <div class="kpi"><span class="k-label" data-i18n="kAval"></span><span class="k-value" id="k-aval">–</span><span class="k-sub" id="k-aval-sub"></span></div>
+    <div class="kpi"><span class="k-label" data-i18n="kCob"></span><span class="k-value" id="k-cob">–</span><span class="k-sub" id="k-cob-sub"></span></div>
+  </section>
+
+  <div class="duo">
+    <section class="panel" aria-labelledby="h-evol">
+      <div class="panel-head">
+        <h2 id="h-evol"></h2>
+        <button type="button" class="linkbtn" id="b-pt" hidden data-i18n="backPt"></button>
+      </div>
+      <div class="legend" id="chart-legend"></div>
+      <div id="chart"></div>
+      <p class="note" data-i18n="chartNote"></p>
+    </section>
+
+    <section class="panel" aria-labelledby="h-mapa">
+      <div class="panel-head">
+        <h2 id="h-mapa" data-i18n="mapTitle"></h2>
+      </div>
+      <div class="map-legend"><span id="lg-min" class="num">–</span><span class="bar" id="lg-bar"></span><span id="lg-max" class="num">–</span><span class="na"></span><span data-i18n="noSample"></span></div>
+      <div id="map"></div>
+      <p class="note" data-i18n="mapNote"></p>
+    </section>
+  </div>
+
+  <section class="panel" aria-labelledby="h-rank">
+    <div class="panel-head">
+      <h2 id="h-rank" data-i18n="rankTitle"></h2>
+      <p class="note" id="rank-note"></p>
+    </div>
+    <div class="rank-tools">
+      <div class="rank-stats"><span><b id="r-n">–</b><span data-i18n="statN"></span></span><span><b id="r-med">–</b><span data-i18n="statMed"></span></span></div>
+      <div class="field"><label for="f-search" data-i18n="search"></label><input type="search" id="f-search" data-i18n-ph="searchPh"></div>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>#</th><th data-i18n="thMun"></th><th>NUTS III</th><th class="r" id="th-p0"></th><th class="r" id="th-p1"></th><th class="r" data-i18n="thVar"></th><th class="r" data-i18n="thAval"></th></tr></thead>
+        <tbody id="rank-body"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p data-i18n-html="fSource"></p>
+  <p data-i18n-html="fMethod"></p>
+  <p data-i18n="fBuilt"></p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+<script>
+/*__DATA__*/
+/*__TOPO__*/
+(() => {
+  const I18N = {
+    pt: {
+      title: 'Habitação em Portugal',
+      eyebrow: 'INE · Avaliação bancária na habitação',
+      h1: 'Quanto vale o metro quadrado <span>em Portugal</span>',
+      lede: 'Valor mediano por m² atribuído pelos bancos nas avaliações para crédito à habitação, por município, de janeiro de 2024 a setembro de 2026. São avaliações bancárias, não preços de venda.',
+      local: 'Local', tipo: 'Tipo de habitação', tTotal: 'Total', tApartamentos: 'Apartamentos', tMoradias: 'Moradias',
+      mes: 'Mês de referência', min: 'Mínimo de avaliações', kpisAria: 'Indicadores do local selecionado',
+      kPreco: 'Valor mediano', kYoy: 'Variação homóloga', kPer: 'Variação desde jan. 2024', kAval: 'Avaliações (3 meses)', kCob: 'Municípios com valor',
+      chip: 'Amostra abaixo do mínimo ({n} avaliações)', yoySub: 'face a {m}', perSub: 'de {a} para {b} €/m²', perNone: 'sem valor em janeiro de 2024',
+      avalSub: 'nos 3 meses até {m}', cobSub: '{a} de {b} com valor publicado',
+      evol: 'Evolução em {nome}', backPt: 'Voltar a Portugal', lgBelow: 'abaixo do mínimo de avaliações',
+      chartNote: 'Média móvel de 3 meses publicada pelo INE, em €/m².', noData: 'Sem valores publicados para esta seleção.',
+      tipAval: 'Avaliações', mapTitle: 'Variação homóloga por município', noSample: 'sem amostra',
+      mapNote: 'Clica num município para ver a sua evolução. Açores e Madeira em escala própria.', mapAria: 'Mapa de Portugal por município',
+      azores: 'Açores', madeira: 'Madeira', tipVar: 'Variação', tipVal: 'Valor', tipPos: 'Posição', tipRank: '{p}.º de {n}', tipNone: 'Sem avaliações suficientes',
+      rankTitle: 'Ranking municipal', statN: 'municípios', statMed: 'mediana', search: 'Procurar município', searchPh: 'Ex.: Braga',
+      rankNote: '{a} face a {b}, mínimo de {n} avaliações', thMun: 'Município', thVar: 'Variação', thAval: 'Avaliações',
+      emptyQ: 'Nenhum município com esse nome no ranking.', emptyMin: 'Nenhum município cumpre o mínimo de avaliações. Baixa o mínimo para ver o ranking.',
+      fSource: '<strong>Fonte:</strong> INE, Inquérito à avaliação bancária na habitação (valores medianos, médias móveis de 3 meses). Limites municipais: CAOP, Direção-Geral do Território.',
+      fMethod: '<strong>Método:</strong> a variação homóloga compara o mês de referência com o mesmo mês do ano anterior. No mapa e no ranking só entram municípios com avaliações iguais ou acima do mínimo escolhido nos dois meses comparados. Os indicadores do topo usam o valor publicado, mesmo com amostra pequena, e assinalam quando fica abaixo do mínimo.',
+      fBuilt: 'Versão web de um dashboard construído em Power BI.',
+      months: ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],
+      monthsShort: ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'],
+      monthYear: (m, y) => `${m} de ${y}`, locale: 'pt-PT', dec: ',',
+    },
+    en: {
+      title: 'Housing in Portugal',
+      eyebrow: 'INE (Statistics Portugal) · Bank housing appraisals',
+      h1: 'What a square metre is worth <span>in Portugal</span>',
+      lede: 'Median value per m² assigned by banks when appraising homes for mortgage lending, by municipality, from January 2024 to September 2026. These are bank appraisals, not sale prices.',
+      local: 'Location', tipo: 'Dwelling type', tTotal: 'All', tApartamentos: 'Apartments', tMoradias: 'Houses',
+      mes: 'Reference month', min: 'Minimum appraisals', kpisAria: 'Figures for the selected location',
+      kPreco: 'Median value', kYoy: 'Year-on-year change', kPer: 'Change since Jan 2024', kAval: 'Appraisals (3 months)', kCob: 'Municipalities with data',
+      chip: 'Sample below minimum ({n} appraisals)', yoySub: 'vs {m}', perSub: 'from {a} to {b} €/m²', perNone: 'no value in January 2024',
+      avalSub: 'in the 3 months to {m}', cobSub: '{a} of {b} with a published value',
+      evol: 'Trend in {nome}', backPt: 'Back to Portugal', lgBelow: 'below minimum appraisals',
+      chartNote: '3-month moving average published by INE, in €/m².', noData: 'No published values for this selection.',
+      tipAval: 'Appraisals', mapTitle: 'Year-on-year change by municipality', noSample: 'no sample',
+      mapNote: 'Click a municipality to see its trend. The Azores and Madeira are shown at their own scale.', mapAria: 'Map of Portugal by municipality',
+      azores: 'Azores', madeira: 'Madeira', tipVar: 'Change', tipVal: 'Value', tipPos: 'Rank', tipRank: '{p} of {n}', tipNone: 'Not enough appraisals',
+      rankTitle: 'Municipal ranking', statN: 'municipalities', statMed: 'median', search: 'Search municipality', searchPh: 'e.g. Braga',
+      rankNote: '{a} vs {b}, minimum of {n} appraisals', thMun: 'Municipality', thVar: 'Change', thAval: 'Appraisals',
+      emptyQ: 'No municipality with that name in the ranking.', emptyMin: 'No municipality meets the minimum number of appraisals. Lower the minimum to see the ranking.',
+      fSource: '<strong>Source:</strong> INE (Statistics Portugal), Survey on bank appraisal of housing (median values, 3-month moving averages). Municipal boundaries: CAOP, Directorate-General for Territory.',
+      fMethod: '<strong>Method:</strong> year-on-year change compares the reference month with the same month of the previous year. The map and ranking only include municipalities with at least the chosen minimum number of appraisals in both months. The headline figures use the published value even when the sample is small, and flag when it falls below the minimum.',
+      fBuilt: 'Web version of a dashboard built in Power BI.',
+      months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      monthYear: (m, y) => `${m} ${y}`, locale: 'en-GB', dec: '.',
+    },
+  };
+
+  const months = DATA.m;
+  const last = months.length - 1;
+  const geos = DATA.g.map((g, i) => ({ i, cod: g[0], nome: g[1], nuts3: g[2], nuts2: g[3] }));
+  const byCod = new Map(geos.map(g => [g.cod, g]));
+  const munis = geos.filter(g => g.i > 0);
+  const hashLang = location.hash.slice(1);
+  const state = {
+    geo: 0, tipo: 'Total', mes: last, min: 150, q: '',
+    lang: I18N[hashLang] ? hashLang : ((navigator.language || 'pt').toLowerCase().startsWith('pt') ? 'pt' : 'en'),
+  };
+
+  const L = () => I18N[state.lang];
+  const t = (key, vars = {}) => L()[key].replace(/\{(\w+)\}/g, (_, k) => vars[k]);
+  const P = (gi, mi) => DATA.s[state.tipo][gi][0][mi] ?? null;
+  const N = (gi, mi) => DATA.s[state.tipo][gi][1][mi] ?? null;
+  const rel = (gi, mi) => (mi >= 0 && P(gi, mi) != null && N(gi, mi) != null && N(gi, mi) >= state.min ? P(gi, mi) : null);
+  const yoyRel = (gi, mi) => { const a = rel(gi, mi), b = rel(gi, mi - 12); return a != null && b != null ? a / b - 1 : null; };
+  const yoyRaw = (gi, mi) => { if (mi < 12) return null; const a = P(gi, mi), b = P(gi, mi - 12); return a != null && b != null ? a / b - 1 : null; };
+
+  const fmtInt = v => (v == null ? '–' : Math.round(v).toLocaleString(L().locale, { useGrouping: 'always' }));
+  const fmtPct = v => (v == null ? '–' : (v > 0.0005 ? '+' : v < -0.0005 ? '−' : '') + Math.abs(v * 100).toFixed(1).replace('.', L().dec) + '%');
+  const ym = i => { const [y, m] = months[i].split('-'); return { y, m: +m - 1 }; };
+  const mesLongo = i => { const d = ym(i); return L().monthYear(L().months[d.m], d.y); };
+  const mesCurto = i => { const d = ym(i); return L().monthsShort[d.m] + ' ' + d.y.slice(2); };
+  const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+  // Controlos
+  const fLocal = document.getElementById('f-local');
+  const regioes = d3.groups(munis, g => g.nuts2).sort((a, b) => a[0].localeCompare(b[0], 'pt'));
+  fLocal.innerHTML = '<option value="0">Portugal</option>' + regioes.map(([r, gs]) =>
+    `<optgroup label="${esc(r)}">` + gs.slice().sort((a, b) => a.nome.localeCompare(b.nome, 'pt'))
+      .map(g => `<option value="${g.i}">${esc(g.nome)}</option>`).join('') + '</optgroup>').join('');
+  fLocal.addEventListener('change', () => setGeo(+fLocal.value));
+
+  const fMes = document.getElementById('f-mes');
+  fMes.addEventListener('change', () => { state.mes = +fMes.value; render(); });
+  function fillMonths() {
+    fMes.innerHTML = months.map((_, i) => i).filter(i => i >= 12).reverse()
+      .map(i => `<option value="${i}">${mesLongo(i)}</option>`).join('');
+    fMes.value = String(state.mes);
+  }
+
+  document.querySelectorAll('#f-tipo button').forEach(b => b.addEventListener('click', () => {
+    state.tipo = b.dataset.tipo;
+    document.querySelectorAll('#f-tipo button').forEach(x => x.setAttribute('aria-checked', String(x === b)));
+    render();
+  }));
+
+  const fMin = document.getElementById('f-min');
+  fMin.addEventListener('input', () => { state.min = +fMin.value; document.getElementById('o-min').value = fMin.value; render(); });
+  document.getElementById('f-search').addEventListener('input', e => { state.q = norm(e.target.value.trim()); renderTable(); });
+  document.getElementById('b-pt').addEventListener('click', () => setGeo(0));
+
+  document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => {
+    setLang(b.dataset.lang);
+    history.replaceState(null, '', '#' + state.lang);
+  }));
+  window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if (I18N[h] && h !== state.lang) setLang(h); });
+
+  function setLang(lang) {
+    state.lang = lang;
+    document.documentElement.lang = lang === 'pt' ? 'pt-PT' : 'en';
+    document.title = t('title');
+    document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = L()[el.dataset.i18nHtml]; });
+    document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
+    document.querySelectorAll('[data-i18n-aria]').forEach(el => { el.setAttribute('aria-label', t(el.dataset.i18nAria)); });
+    document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+    mapSvg.attr('aria-label', t('mapAria'));
+    insetLabels.forEach(([el, key]) => el.text(t(key)));
+    fillMonths();
+    render();
+  }
+
+  function setGeo(i) {
+    state.geo = i;
+    fLocal.value = String(i);
+    render();
+  }
+
+  // Ranking
+  let ranking = [];
+  function computeRanking() {
+    const rows = munis.map(g => ({ g, v: yoyRel(g.i, state.mes), p1: rel(g.i, state.mes), p0: rel(g.i, state.mes - 12), n: N(g.i, state.mes) }))
+      .filter(r => r.v != null).sort((a, b) => b.v - a.v);
+    rows.forEach((r, k) => { r.pos = k > 0 && r.v === rows[k - 1].v ? rows[k - 1].pos : k + 1; });
+    ranking = rows;
+  }
+
+  // Indicadores
+  function renderKpis() {
+    const g = geos[state.geo], m = state.mes;
+    const p = P(g.i, m), n = N(g.i, m);
+    document.getElementById('k-preco').innerHTML = p == null ? '–' : `${fmtInt(p)}<small>€/m²</small>`;
+    document.getElementById('k-preco-sub').textContent = `${g.nome}, ${mesLongo(m)}`;
+    const chip = document.getElementById('k-chip');
+    chip.hidden = !(g.i > 0 && p != null && (n == null || n < state.min));
+    chip.textContent = t('chip', { n: fmtInt(n) });
+    document.getElementById('k-yoy').textContent = fmtPct(yoyRaw(g.i, m));
+    document.getElementById('k-yoy-sub').textContent = t('yoySub', { m: mesLongo(m - 12) });
+    const p0 = P(g.i, 0);
+    document.getElementById('k-per').textContent = fmtPct(p != null && p0 != null ? p / p0 - 1 : null);
+    document.getElementById('k-per-sub').textContent = p0 == null ? t('perNone') : t('perSub', { a: fmtInt(p0), b: fmtInt(p) });
+    document.getElementById('k-aval').textContent = fmtInt(n);
+    document.getElementById('k-aval-sub').textContent = t('avalSub', { m: mesCurto(m) });
+    const comValor = munis.filter(x => P(x.i, m) != null).length;
+    document.getElementById('k-cob').textContent = Math.round(100 * comValor / munis.length) + '%';
+    document.getElementById('k-cob-sub').textContent = t('cobSub', { a: comValor, b: munis.length });
+  }
+
+  // Gráfico de evolução
+  const chartEl = document.getElementById('chart');
+  const chartTip = Object.assign(document.createElement('div'), { className: 'tip', hidden: true });
+  chartEl.appendChild(chartTip);
+  function renderChart() {
+    const g = geos[state.geo];
+    document.getElementById('h-evol').textContent = t('evol', { nome: g.nome });
+    document.getElementById('b-pt').hidden = g.i === 0;
+    const legend = [`<span><i></i>${esc(g.nome)}</span>`];
+    if (g.i > 0) legend.push('<span><i class="cmp"></i>Portugal</span>', `<span><i class="dot"></i>${esc(t('lgBelow'))}</span>`);
+    document.getElementById('chart-legend').innerHTML = legend.join('');
+
+    const W = Math.max(chartEl.clientWidth, 280), H = 300, mg = { t: 16, r: 62, b: 28, l: 46 };
+    const sel = months.map((_, i) => ({ i, p: P(g.i, i), n: N(g.i, i) }));
+    const cmp = g.i > 0 ? months.map((_, i) => ({ i, p: P(0, i) })) : [];
+    const vals = sel.concat(cmp).map(d => d.p).filter(v => v != null);
+    const svg = d3.select(chartEl).selectAll('svg').data([0]).join('svg').attr('viewBox', `0 0 ${W} ${H}`);
+    svg.selectAll('*').remove();
+    if (!vals.length) {
+      svg.append('text').attr('x', W / 2).attr('y', H / 2).attr('text-anchor', 'middle').style('fill', css('--muted')).text(t('noData'));
+      return;
+    }
+    const x = d3.scaleLinear([0, last], [mg.l, W - mg.r]);
+    const y = d3.scaleLinear([d3.min(vals) * 0.96, d3.max(vals) * 1.03], [H - mg.b, mg.t]).nice();
+    const grid = svg.append('g').attr('class', 'grid axis');
+    y.ticks(5).forEach(v => {
+      grid.append('line').attr('x1', mg.l).attr('x2', W - mg.r).attr('y1', y(v)).attr('y2', y(v));
+      grid.append('text').attr('x', mg.l - 8).attr('y', y(v)).attr('dy', '0.32em').attr('text-anchor', 'end').text(fmtInt(v));
+    });
+    const step = W < 560 ? 6 : 3;
+    const ax = svg.append('g').attr('class', 'axis');
+    months.forEach((_, i) => {
+      if (ym(i).m % step !== 0) return;
+      ax.append('text').attr('x', x(i)).attr('y', H - 8).attr('text-anchor', 'middle').text(mesCurto(i));
+    });
+    const line = d3.line().defined(d => d.p != null).x(d => x(d.i)).y(d => y(d.p));
+    const area = d3.area().defined(d => d.p != null).x(d => x(d.i)).y0(H - mg.b).y1(d => y(d.p));
+    svg.append('path').datum(sel).attr('d', area).style('fill', css('--accent-soft'));
+    if (cmp.length) svg.append('path').datum(cmp).attr('d', line).style('fill', 'none').style('stroke', css('--compare')).style('stroke-width', 2).style('stroke-dasharray', '5 4');
+    svg.append('path').datum(sel).attr('d', line).style('fill', 'none').style('stroke', css('--accent')).style('stroke-width', 2.5).style('stroke-linejoin', 'round');
+    if (g.i > 0) {
+      svg.append('g').selectAll('circle').data(sel.filter(d => d.p != null && (d.n == null || d.n < state.min))).join('circle')
+        .attr('cx', d => x(d.i)).attr('cy', d => y(d.p)).attr('r', 3.5)
+        .style('fill', css('--surface')).style('stroke', css('--accent')).style('stroke-width', 1.8);
+    }
+    const ref = sel[state.mes];
+    svg.append('line').attr('x1', x(state.mes)).attr('x2', x(state.mes)).attr('y1', mg.t).attr('y2', H - mg.b)
+      .style('stroke', css('--muted')).style('stroke-dasharray', '2 3');
+    if (ref.p != null) {
+      svg.append('circle').attr('cx', x(state.mes)).attr('cy', y(ref.p)).attr('r', 5).style('fill', css('--accent')).style('stroke', css('--surface')).style('stroke-width', 2);
+      svg.append('text').attr('x', x(state.mes) + 8).attr('y', y(ref.p)).attr('dy', '0.32em')
+        .style('fill', css('--ink')).style('font-weight', 600).style('font-size', '12.5px').text(fmtInt(ref.p));
+    }
+    const hover = svg.append('line').attr('y1', mg.t).attr('y2', H - mg.b).style('stroke', css('--line')).style('stroke-width', 1).attr('visibility', 'hidden');
+    svg.append('rect').attr('x', mg.l).attr('y', mg.t).attr('width', W - mg.l - mg.r).attr('height', H - mg.t - mg.b).style('fill', 'transparent')
+      .on('pointermove', ev => {
+        const [mx] = d3.pointer(ev);
+        const i = Math.max(0, Math.min(last, Math.round(x.invert(mx))));
+        hover.attr('x1', x(i)).attr('x2', x(i)).attr('visibility', 'visible');
+        let html = `<strong>${mesLongo(i)}</strong><div class="row"><span>${esc(g.nome)}</span><span>${fmtInt(sel[i].p)} €/m²</span></div>`;
+        if (cmp.length) html += `<div class="row"><span>Portugal</span><span>${fmtInt(cmp[i].p)} €/m²</span></div>`;
+        html += `<div class="row"><span>${esc(t('tipAval'))}</span><span>${fmtInt(sel[i].n)}</span></div>`;
+        chartTip.innerHTML = html;
+        chartTip.hidden = false;
+        const left = Math.min(x(i) / W * chartEl.clientWidth + 12, chartEl.clientWidth - chartTip.offsetWidth - 4);
+        chartTip.style.left = Math.max(0, left) + 'px';
+        chartTip.style.top = '8px';
+      })
+      .on('pointerleave', () => { chartTip.hidden = true; hover.attr('visibility', 'hidden'); });
+  }
+
+  // Mapa: continente, Açores e Madeira com escala própria cada um.
+  const mapEl = document.getElementById('map');
+  const MW = 560, MH = 640;
+  const fc = topojson.feature(TOPO, TOPO.objects.municipios);
+  const regiao = f => String(f.properties.cod_geo)[0];
+  const boxes = { 1: [[200, 10], [MW - 10, MH - 10]], 2: [[14, 46], [190, 156]], 3: [[14, 226], [130, 300]] };
+  const paths = {};
+  for (const k of Object.keys(boxes)) {
+    const sub = { type: 'FeatureCollection', features: fc.features.filter(f => regiao(f) === k) };
+    paths[k] = d3.geoPath(d3.geoMercator().fitExtent(boxes[k], sub));
+  }
+  const geoPath = f => paths[regiao(f)](f);
+  const mapSvg = d3.select(mapEl).append('svg').attr('viewBox', `0 0 ${MW} ${MH}`).attr('role', 'img');
+  const insets = mapSvg.append('g');
+  const insetLabels = [];
+  [['2', 'azores'], ['3', 'madeira']].forEach(([k, key]) => {
+    const [[x0, y0], [x1, y1]] = boxes[k];
+    insets.append('rect').attr('class', 'inset').attr('x', x0 - 8).attr('y', y0 - 8).attr('width', x1 - x0 + 16).attr('height', y1 - y0 + 16).attr('rx', 4);
+    insetLabels.push([insets.append('text').attr('class', 'inset-label').attr('x', x0 - 8).attr('y', y0 - 14), key]);
+  });
+  const shapes = mapSvg.append('g').selectAll('path').data(fc.features).join('path')
+    .attr('class', 'shape').attr('d', geoPath).attr('tabindex', 0)
+    .attr('aria-label', d => d.properties.nome_geo)
+    .on('click', (ev, d) => { const g = byCod.get(String(d.properties.cod_geo)); if (g) setGeo(g.i === state.geo ? 0 : g.i); })
+    .on('keydown', (ev, d) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); const g = byCod.get(String(d.properties.cod_geo)); if (g) setGeo(g.i); } })
+    .on('pointermove', (ev, d) => showMapTip(ev, d))
+    .on('pointerleave', () => { mapTip.hidden = true; });
+  const mapTip = Object.assign(document.createElement('div'), { className: 'tip', hidden: true });
+  mapEl.appendChild(mapTip);
+  let rankByCod = new Map();
+
+  function showMapTip(ev, d) {
+    const g = byCod.get(String(d.properties.cod_geo));
+    if (!g) return;
+    const r = rankByCod.get(g.cod);
+    mapTip.innerHTML = `<strong>${esc(g.nome)}</strong>` + (r
+      ? `<div class="row"><span>${esc(t('tipVar'))}</span><span>${fmtPct(r.v)}</span></div><div class="row"><span>${esc(t('tipVal'))}</span><span>${fmtInt(r.p1)} €/m²</span></div><div class="row"><span>${esc(t('tipPos'))}</span><span>${esc(t('tipRank', { p: r.pos, n: ranking.length }))}</span></div>`
+      : `<div class="row"><span>${esc(t('tipNone'))}</span></div>`);
+    mapTip.hidden = false;
+    const [px, py] = d3.pointer(ev, mapEl);
+    mapTip.style.left = Math.max(0, Math.min(px + 14, mapEl.clientWidth - mapTip.offsetWidth - 4)) + 'px';
+    mapTip.style.top = Math.max(0, py - mapTip.offsetHeight - 10) + 'px';
+  }
+
+  function renderMap() {
+    rankByCod = new Map(ranking.map(r => [r.g.cod, r]));
+    const vs = ranking.map(r => r.v);
+    const lo = css('--seq-lo'), hi = css('--seq-hi');
+    const ext = vs.length ? d3.extent(vs) : [0, 0];
+    const color = d3.scaleSequential(ext[0] === ext[1] ? [ext[0] - 0.01, ext[1] + 0.01] : ext, d3.interpolateRgb(lo, hi));
+    const selCod = geos[state.geo].cod;
+    shapes
+      .style('fill', d => { const r = rankByCod.get(String(d.properties.cod_geo)); return r ? color(r.v) : css('--na'); })
+      .style('stroke', d => (String(d.properties.cod_geo) === selCod ? css('--ink') : css('--surface')))
+      .style('stroke-width', d => (String(d.properties.cod_geo) === selCod ? 2 : 0.4))
+      .style('cursor', 'pointer');
+    shapes.filter(d => String(d.properties.cod_geo) === selCod).raise();
+    insets.selectAll('rect.inset').style('fill', 'none').style('stroke', css('--line')).style('stroke-dasharray', '3 3');
+    insets.selectAll('text.inset-label').style('fill', css('--muted')).style('font-size', '11px');
+    document.getElementById('lg-min').textContent = vs.length ? fmtPct(ext[0]) : '–';
+    document.getElementById('lg-max').textContent = vs.length ? fmtPct(ext[1]) : '–';
+    document.getElementById('lg-bar').style.background = `linear-gradient(90deg, ${lo}, ${hi})`;
+  }
+
+  // Tabela
+  function renderTable() {
+    const tbody = document.getElementById('rank-body');
+    const rows = state.q ? ranking.filter(r => norm(r.g.nome).includes(state.q)) : ranking;
+    const maxV = d3.max(ranking, r => Math.abs(r.v)) || 1;
+    document.getElementById('r-n').textContent = ranking.length;
+    document.getElementById('r-med').textContent = fmtPct(ranking.length ? d3.median(ranking, r => r.v) : null);
+    document.getElementById('rank-note').textContent = t('rankNote', { a: mesLongo(state.mes), b: mesLongo(state.mes - 12), n: state.min });
+    document.getElementById('th-p0').textContent = mesCurto(state.mes - 12);
+    document.getElementById('th-p1').textContent = mesCurto(state.mes);
+    if (!rows.length) {
+      tbody.innerHTML = `<tr><td colspan="7" class="empty">${esc(ranking.length ? t('emptyQ') : t('emptyMin'))}</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = rows.map(r => `<tr data-i="${r.g.i}" tabindex="0" aria-selected="${r.g.i === state.geo}">
+      <td class="pos">${r.pos}</td><td class="mun">${esc(r.g.nome)}</td><td class="reg">${esc(r.g.nuts3)}</td>
+      <td class="r">${fmtInt(r.p0)}</td><td class="r">${fmtInt(r.p1)}</td>
+      <td class="r"><div class="vbar"><span style="width:${Math.max(2, 60 * Math.abs(r.v) / maxV).toFixed(1)}px"></span>${fmtPct(r.v)}</div></td>
+      <td class="r">${fmtInt(r.n)}</td></tr>`).join('');
+  }
+  document.getElementById('rank-body').addEventListener('click', e => { const tr = e.target.closest('tr[data-i]'); if (tr) setGeo(+tr.dataset.i); });
+  document.getElementById('rank-body').addEventListener('keydown', e => {
+    const tr = e.target.closest('tr[data-i]');
+    if (tr && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); setGeo(+tr.dataset.i); }
+  });
+
+  function render() {
+    computeRanking();
+    renderKpis();
+    renderChart();
+    renderMap();
+    renderTable();
+  }
+
+  new ResizeObserver(() => renderChart()).observe(chartEl);
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', render);
+  new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  setLang(state.lang);
+})();
+</script>

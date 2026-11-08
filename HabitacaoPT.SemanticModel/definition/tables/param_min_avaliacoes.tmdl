@@ -1,0 +1,14 @@
+table param_min_avaliacoes
+	lineageTag: 1e7a6e1c-499d-4a37-a8a5-ded46629f5c6
+
+	column Valor
+		dataType: int64
+		formatString: 0
+		lineageTag: b0b8c71a-d271-449c-bb12-b94627e7b4f9
+		summarizeBy: none
+		sourceColumn: [Value]
+
+	partition param_min_avaliacoes = calculated
+		mode: import
+		source = GENERATESERIES(0, 400, 10)
+

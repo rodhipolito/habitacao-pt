@@ -1,0 +1,348 @@
+﻿cod_geo,nome_geo,nivel,cod_nuts3,cod_nuts2,cod_nuts1,nome_nuts3,nome_nuts2
+1,Continente,NUTS I,,,1,,
+2,Região Autónoma dos Açores,NUTS I,,,2,,
+3,Região Autónoma da Madeira,NUTS I,,,3,,
+11,Norte,NUTS II,,11,1,,Norte
+15,Algarve,NUTS II,,15,1,,Algarve
+19,Centro,NUTS II,,19,1,,Centro
+1A,Grande Lisboa,NUTS II,,1A,1,,Grande Lisboa
+1B,Península de Setúbal,NUTS II,,1B,1,,Península de Setúbal
+1C,Alentejo,NUTS II,,1C,1,,Alentejo
+1D,Oeste e Vale do Tejo,NUTS II,,1D,1,,Oeste e Vale do Tejo
+20,Região Autónoma dos Açores,NUTS II,,20,2,,Região Autónoma dos Açores
+30,Região Autónoma da Madeira,NUTS II,,30,3,,Região Autónoma da Madeira
+PT,Portugal,Pais,,,,,
+111,Alto Minho,NUTS III,111,11,1,Alto Minho,Norte
+112,Cávado,NUTS III,112,11,1,Cávado,Norte
+119,Ave,NUTS III,119,11,1,Ave,Norte
+11A,Área Metropolitana do Porto,NUTS III,11A,11,1,Área Metropolitana do Porto,Norte
+11B,Alto Tâmega e Barroso,NUTS III,11B,11,1,Alto Tâmega e Barroso,Norte
+11C,Tâmega e Sousa,NUTS III,11C,11,1,Tâmega e Sousa,Norte
+11D,Douro,NUTS III,11D,11,1,Douro,Norte
+11E,Terras de Trás-os-Montes,NUTS III,11E,11,1,Terras de Trás-os-Montes,Norte
+150,Algarve,NUTS III,150,15,1,Algarve,Algarve
+191,Região de Aveiro,NUTS III,191,19,1,Região de Aveiro,Centro
+192,Região de Coimbra,NUTS III,192,19,1,Região de Coimbra,Centro
+193,Região de Leiria,NUTS III,193,19,1,Região de Leiria,Centro
+194,Viseu Dão Lafões,NUTS III,194,19,1,Viseu Dão Lafões,Centro
+195,Beira Baixa,NUTS III,195,19,1,Beira Baixa,Centro
+196,Beiras e Serra da Estrela,NUTS III,196,19,1,Beiras e Serra da Estrela,Centro
+1A0,Grande Lisboa,NUTS III,1A0,1A,1,Grande Lisboa,Grande Lisboa
+1B0,Península de Setúbal,NUTS III,1B0,1B,1,Península de Setúbal,Península de Setúbal
+1C1,Alentejo Litoral,NUTS III,1C1,1C,1,Alentejo Litoral,Alentejo
+1C2,Baixo Alentejo,NUTS III,1C2,1C,1,Baixo Alentejo,Alentejo
+1C3,Alto Alentejo,NUTS III,1C3,1C,1,Alto Alentejo,Alentejo
+1C4,Alentejo Central,NUTS III,1C4,1C,1,Alentejo Central,Alentejo
+1D1,Oeste,NUTS III,1D1,1D,1,Oeste,Oeste e Vale do Tejo
+1D2,Médio Tejo,NUTS III,1D2,1D,1,Médio Tejo,Oeste e Vale do Tejo
+1D3,Lezíria do Tejo,NUTS III,1D3,1D,1,Lezíria do Tejo,Oeste e Vale do Tejo
+200,Região Autónoma dos Açores,NUTS III,200,20,2,Região Autónoma dos Açores,Região Autónoma dos Açores
+300,Região Autónoma da Madeira,NUTS III,300,30,3,Região Autónoma da Madeira,Região Autónoma da Madeira
+1111601,Arcos de Valdevez,Municipio,111,11,1,Alto Minho,Norte
+1111602,Caminha,Municipio,111,11,1,Alto Minho,Norte
+1111603,Melgaço,Municipio,111,11,1,Alto Minho,Norte
+1111604,Monção,Municipio,111,11,1,Alto Minho,Norte
+1111605,Paredes de Coura,Municipio,111,11,1,Alto Minho,Norte
+1111606,Ponte da Barca,Municipio,111,11,1,Alto Minho,Norte
+1111607,Ponte de Lima,Municipio,111,11,1,Alto Minho,Norte
+1111608,Valença,Municipio,111,11,1,Alto Minho,Norte
+1111609,Viana do Castelo,Municipio,111,11,1,Alto Minho,Norte
+1111610,Vila Nova de Cerveira,Municipio,111,11,1,Alto Minho,Norte
+1120301,Amares,Municipio,112,11,1,Cávado,Norte
+1120302,Barcelos,Municipio,112,11,1,Cávado,Norte
+1120303,Braga,Municipio,112,11,1,Cávado,Norte
+1120306,Esposende,Municipio,112,11,1,Cávado,Norte
+1120310,Terras de Bouro,Municipio,112,11,1,Cávado,Norte
+1120313,Vila Verde,Municipio,112,11,1,Cávado,Norte
+1190304,Cabeceiras de Basto,Municipio,119,11,1,Ave,Norte
+1190307,Fafe,Municipio,119,11,1,Ave,Norte
+1190308,Guimarães,Municipio,119,11,1,Ave,Norte
+1190309,Póvoa de Lanhoso,Municipio,119,11,1,Ave,Norte
+1190311,Vieira do Minho,Municipio,119,11,1,Ave,Norte
+1190312,Vila Nova de Famalicão,Municipio,119,11,1,Ave,Norte
+1190314,Vizela,Municipio,119,11,1,Ave,Norte
+1191705,Mondim de Basto,Municipio,119,11,1,Ave,Norte
+11A0104,Arouca,Municipio,11A,11,1,Área Metropolitana do Porto,Norte
+11A0107,Espinho,Municipio,11A,11,1,Área Metropolitana do Porto,Norte
+11A0109,Santa Maria da Feira,Municipio,11A,11,1,Área Metropolitana do Porto,Norte
+11A0113,Oliveira de Azeméis,Municipio,11A,11,1,Área Metropolitana do Porto,Norte
+11A0116,São João da Madeira,Municipio,11A,11,1,Área Metropolitana do Porto,Norte
+11A0119,Vale de Cambra,Municipio,11A,11,1,Área Metropolitana do Porto,Norte
+11A1304,Gondomar,Municipio,11A,11,1,Área Metropolitana do Porto,Norte
+11A1306,Maia,Municipio,11A,11,1,Área Metropolitana do Porto,Norte
+11A1308,Matosinhos,Municipio,11A,11,1,Área Metropolitana do Porto,Norte
+11A1310,Paredes,Municipio,11A,11,1,Área Metropolitana do Porto,Norte
+11A1312,Porto,Municipio,11A,11,1,Área Metropolitana do Porto,Norte
+11A1313,Póvoa de Varzim,Municipio,11A,11,1,Área Metropolitana do Porto,Norte
+11A1314,Santo Tirso,Municipio,11A,11,1,Área Metropolitana do Porto,Norte
+11A1315,Valongo,Municipio,11A,11,1,Área Metropolitana do Porto,Norte
+11A1316,Vila do Conde,Municipio,11A,11,1,Área Metropolitana do Porto,Norte
+11A1317,Vila Nova de Gaia,Municipio,11A,11,1,Área Metropolitana do Porto,Norte
+11A1318,Trofa,Municipio,11A,11,1,Área Metropolitana do Porto,Norte
+11B1702,Boticas,Municipio,11B,11,1,Alto Tâmega e Barroso,Norte
+11B1703,Chaves,Municipio,11B,11,1,Alto Tâmega e Barroso,Norte
+11B1706,Montalegre,Municipio,11B,11,1,Alto Tâmega e Barroso,Norte
+11B1709,Ribeira de Pena,Municipio,11B,11,1,Alto Tâmega e Barroso,Norte
+11B1712,Valpaços,Municipio,11B,11,1,Alto Tâmega e Barroso,Norte
+11B1713,Vila Pouca de Aguiar,Municipio,11B,11,1,Alto Tâmega e Barroso,Norte
+11C0106,Castelo de Paiva,Municipio,11C,11,1,Tâmega e Sousa,Norte
+11C0305,Celorico de Basto,Municipio,11C,11,1,Tâmega e Sousa,Norte
+11C1301,Amarante,Municipio,11C,11,1,Tâmega e Sousa,Norte
+11C1302,Baião,Municipio,11C,11,1,Tâmega e Sousa,Norte
+11C1303,Felgueiras,Municipio,11C,11,1,Tâmega e Sousa,Norte
+11C1305,Lousada,Municipio,11C,11,1,Tâmega e Sousa,Norte
+11C1307,Marco de Canaveses,Municipio,11C,11,1,Tâmega e Sousa,Norte
+11C1309,Paços de Ferreira,Municipio,11C,11,1,Tâmega e Sousa,Norte
+11C1311,Penafiel,Municipio,11C,11,1,Tâmega e Sousa,Norte
+11C1804,Cinfães,Municipio,11C,11,1,Tâmega e Sousa,Norte
+11C1813,Resende,Municipio,11C,11,1,Tâmega e Sousa,Norte
+11D0403,Carrazeda de Ansiães,Municipio,11D,11,1,Douro,Norte
+11D0404,Freixo de Espada à Cinta,Municipio,11D,11,1,Douro,Norte
+11D0409,Torre de Moncorvo,Municipio,11D,11,1,Douro,Norte
+11D0914,Vila Nova de Foz Côa,Municipio,11D,11,1,Douro,Norte
+11D1701,Alijó,Municipio,11D,11,1,Douro,Norte
+11D1704,Mesão Frio,Municipio,11D,11,1,Douro,Norte
+11D1707,Murça,Municipio,11D,11,1,Douro,Norte
+11D1708,Peso da Régua,Municipio,11D,11,1,Douro,Norte
+11D1710,Sabrosa,Municipio,11D,11,1,Douro,Norte
+11D1711,Santa Marta de Penaguião,Municipio,11D,11,1,Douro,Norte
+11D1714,Vila Real,Municipio,11D,11,1,Douro,Norte
+11D1801,Armamar,Municipio,11D,11,1,Douro,Norte
+11D1805,Lamego,Municipio,11D,11,1,Douro,Norte
+11D1807,Moimenta da Beira,Municipio,11D,11,1,Douro,Norte
+11D1812,Penedono,Municipio,11D,11,1,Douro,Norte
+11D1815,São João da Pesqueira,Municipio,11D,11,1,Douro,Norte
+11D1818,Sernancelhe,Municipio,11D,11,1,Douro,Norte
+11D1819,Tabuaço,Municipio,11D,11,1,Douro,Norte
+11D1820,Tarouca,Municipio,11D,11,1,Douro,Norte
+11E0401,Alfândega da Fé,Municipio,11E,11,1,Terras de Trás-os-Montes,Norte
+11E0402,Bragança,Municipio,11E,11,1,Terras de Trás-os-Montes,Norte
+11E0405,Macedo de Cavaleiros,Municipio,11E,11,1,Terras de Trás-os-Montes,Norte
+11E0406,Miranda do Douro,Municipio,11E,11,1,Terras de Trás-os-Montes,Norte
+11E0407,Mirandela,Municipio,11E,11,1,Terras de Trás-os-Montes,Norte
+11E0408,Mogadouro,Municipio,11E,11,1,Terras de Trás-os-Montes,Norte
+11E0410,Vila Flor,Municipio,11E,11,1,Terras de Trás-os-Montes,Norte
+11E0411,Vimioso,Municipio,11E,11,1,Terras de Trás-os-Montes,Norte
+11E0412,Vinhais,Municipio,11E,11,1,Terras de Trás-os-Montes,Norte
+1500801,Albufeira,Municipio,150,15,1,Algarve,Algarve
+1500802,Alcoutim,Municipio,150,15,1,Algarve,Algarve
+1500803,Aljezur,Municipio,150,15,1,Algarve,Algarve
+1500804,Castro Marim,Municipio,150,15,1,Algarve,Algarve
+1500805,Faro,Municipio,150,15,1,Algarve,Algarve
+1500806,Lagoa,Municipio,150,15,1,Algarve,Algarve
+1500807,Lagos,Municipio,150,15,1,Algarve,Algarve
+1500808,Loulé,Municipio,150,15,1,Algarve,Algarve
+1500809,Monchique,Municipio,150,15,1,Algarve,Algarve
+1500810,Olhão,Municipio,150,15,1,Algarve,Algarve
+1500811,Portimão,Municipio,150,15,1,Algarve,Algarve
+1500812,São Brás de Alportel,Municipio,150,15,1,Algarve,Algarve
+1500813,Silves,Municipio,150,15,1,Algarve,Algarve
+1500814,Tavira,Municipio,150,15,1,Algarve,Algarve
+1500815,Vila do Bispo,Municipio,150,15,1,Algarve,Algarve
+1500816,Vila Real de Santo António,Municipio,150,15,1,Algarve,Algarve
+1910101,Águeda,Municipio,191,19,1,Região de Aveiro,Centro
+1910102,Albergaria-a-Velha,Municipio,191,19,1,Região de Aveiro,Centro
+1910103,Anadia,Municipio,191,19,1,Região de Aveiro,Centro
+1910105,Aveiro,Municipio,191,19,1,Região de Aveiro,Centro
+1910108,Estarreja,Municipio,191,19,1,Região de Aveiro,Centro
+1910110,Ílhavo,Municipio,191,19,1,Região de Aveiro,Centro
+1910112,Murtosa,Municipio,191,19,1,Região de Aveiro,Centro
+1910114,Oliveira do Bairro,Municipio,191,19,1,Região de Aveiro,Centro
+1910115,Ovar,Municipio,191,19,1,Região de Aveiro,Centro
+1910117,Sever do Vouga,Municipio,191,19,1,Região de Aveiro,Centro
+1910118,Vagos,Municipio,191,19,1,Região de Aveiro,Centro
+1920111,Mealhada,Municipio,192,19,1,Região de Coimbra,Centro
+1920601,Arganil,Municipio,192,19,1,Região de Coimbra,Centro
+1920602,Cantanhede,Municipio,192,19,1,Região de Coimbra,Centro
+1920603,Coimbra,Municipio,192,19,1,Região de Coimbra,Centro
+1920604,Condeixa-a-Nova,Municipio,192,19,1,Região de Coimbra,Centro
+1920605,Figueira da Foz,Municipio,192,19,1,Região de Coimbra,Centro
+1920606,Góis,Municipio,192,19,1,Região de Coimbra,Centro
+1920607,Lousã,Municipio,192,19,1,Região de Coimbra,Centro
+1920608,Mira,Municipio,192,19,1,Região de Coimbra,Centro
+1920609,Miranda do Corvo,Municipio,192,19,1,Região de Coimbra,Centro
+1920610,Montemor-o-Velho,Municipio,192,19,1,Região de Coimbra,Centro
+1920611,Oliveira do Hospital,Municipio,192,19,1,Região de Coimbra,Centro
+1920612,Pampilhosa da Serra,Municipio,192,19,1,Região de Coimbra,Centro
+1920613,Penacova,Municipio,192,19,1,Região de Coimbra,Centro
+1920614,Penela,Municipio,192,19,1,Região de Coimbra,Centro
+1920615,Soure,Municipio,192,19,1,Região de Coimbra,Centro
+1920616,Tábua,Municipio,192,19,1,Região de Coimbra,Centro
+1920617,Vila Nova de Poiares,Municipio,192,19,1,Região de Coimbra,Centro
+1921808,Mortágua,Municipio,192,19,1,Região de Coimbra,Centro
+1931002,Alvaiázere,Municipio,193,19,1,Região de Leiria,Centro
+1931003,Ansião,Municipio,193,19,1,Região de Leiria,Centro
+1931004,Batalha,Municipio,193,19,1,Região de Leiria,Centro
+1931007,Castanheira de Pêra,Municipio,193,19,1,Região de Leiria,Centro
+1931008,Figueiró dos Vinhos,Municipio,193,19,1,Região de Leiria,Centro
+1931009,Leiria,Municipio,193,19,1,Região de Leiria,Centro
+1931010,Marinha Grande,Municipio,193,19,1,Região de Leiria,Centro
+1931013,Pedrógão Grande,Municipio,193,19,1,Região de Leiria,Centro
+1931015,Pombal,Municipio,193,19,1,Região de Leiria,Centro
+1931016,Porto de Mós,Municipio,193,19,1,Região de Leiria,Centro
+1940901,Aguiar da Beira,Municipio,194,19,1,Viseu Dão Lafões,Centro
+1941802,Carregal do Sal,Municipio,194,19,1,Viseu Dão Lafões,Centro
+1941803,Castro Daire,Municipio,194,19,1,Viseu Dão Lafões,Centro
+1941806,Mangualde,Municipio,194,19,1,Viseu Dão Lafões,Centro
+1941809,Nelas,Municipio,194,19,1,Viseu Dão Lafões,Centro
+1941810,Oliveira de Frades,Municipio,194,19,1,Viseu Dão Lafões,Centro
+1941811,Penalva do Castelo,Municipio,194,19,1,Viseu Dão Lafões,Centro
+1941814,Santa Comba Dão,Municipio,194,19,1,Viseu Dão Lafões,Centro
+1941816,São Pedro do Sul,Municipio,194,19,1,Viseu Dão Lafões,Centro
+1941817,Sátão,Municipio,194,19,1,Viseu Dão Lafões,Centro
+1941821,Tondela,Municipio,194,19,1,Viseu Dão Lafões,Centro
+1941822,Vila Nova de Paiva,Municipio,194,19,1,Viseu Dão Lafões,Centro
+1941823,Viseu,Municipio,194,19,1,Viseu Dão Lafões,Centro
+1941824,Vouzela,Municipio,194,19,1,Viseu Dão Lafões,Centro
+1950502,Castelo Branco,Municipio,195,19,1,Beira Baixa,Centro
+1950505,Idanha-a-Nova,Municipio,195,19,1,Beira Baixa,Centro
+1950506,Oleiros,Municipio,195,19,1,Beira Baixa,Centro
+1950507,Penamacor,Municipio,195,19,1,Beira Baixa,Centro
+1950508,Proença-a-Nova,Municipio,195,19,1,Beira Baixa,Centro
+1950509,Sertã,Municipio,195,19,1,Beira Baixa,Centro
+1950510,Vila de Rei,Municipio,195,19,1,Beira Baixa,Centro
+1950511,Vila Velha de Ródão,Municipio,195,19,1,Beira Baixa,Centro
+1960501,Belmonte,Municipio,196,19,1,Beiras e Serra da Estrela,Centro
+1960503,Covilhã,Municipio,196,19,1,Beiras e Serra da Estrela,Centro
+1960504,Fundão,Municipio,196,19,1,Beiras e Serra da Estrela,Centro
+1960902,Almeida,Municipio,196,19,1,Beiras e Serra da Estrela,Centro
+1960903,Celorico da Beira,Municipio,196,19,1,Beiras e Serra da Estrela,Centro
+1960904,Figueira de Castelo Rodrigo,Municipio,196,19,1,Beiras e Serra da Estrela,Centro
+1960905,Fornos de Algodres,Municipio,196,19,1,Beiras e Serra da Estrela,Centro
+1960906,Gouveia,Municipio,196,19,1,Beiras e Serra da Estrela,Centro
+1960907,Guarda,Municipio,196,19,1,Beiras e Serra da Estrela,Centro
+1960908,Manteigas,Municipio,196,19,1,Beiras e Serra da Estrela,Centro
+1960909,Mêda,Municipio,196,19,1,Beiras e Serra da Estrela,Centro
+1960910,Pinhel,Municipio,196,19,1,Beiras e Serra da Estrela,Centro
+1960911,Sabugal,Municipio,196,19,1,Beiras e Serra da Estrela,Centro
+1960912,Seia,Municipio,196,19,1,Beiras e Serra da Estrela,Centro
+1960913,Trancoso,Municipio,196,19,1,Beiras e Serra da Estrela,Centro
+1A01105,Cascais,Municipio,1A0,1A,1,Grande Lisboa,Grande Lisboa
+1A01106,Lisboa,Municipio,1A0,1A,1,Grande Lisboa,Grande Lisboa
+1A01107,Loures,Municipio,1A0,1A,1,Grande Lisboa,Grande Lisboa
+1A01109,Mafra,Municipio,1A0,1A,1,Grande Lisboa,Grande Lisboa
+1A01110,Oeiras,Municipio,1A0,1A,1,Grande Lisboa,Grande Lisboa
+1A01111,Sintra,Municipio,1A0,1A,1,Grande Lisboa,Grande Lisboa
+1A01114,Vila Franca de Xira,Municipio,1A0,1A,1,Grande Lisboa,Grande Lisboa
+1A01115,Amadora,Municipio,1A0,1A,1,Grande Lisboa,Grande Lisboa
+1A01116,Odivelas,Municipio,1A0,1A,1,Grande Lisboa,Grande Lisboa
+1B01502,Alcochete,Municipio,1B0,1B,1,Península de Setúbal,Península de Setúbal
+1B01503,Almada,Municipio,1B0,1B,1,Península de Setúbal,Península de Setúbal
+1B01504,Barreiro,Municipio,1B0,1B,1,Península de Setúbal,Península de Setúbal
+1B01506,Moita,Municipio,1B0,1B,1,Península de Setúbal,Península de Setúbal
+1B01507,Montijo,Municipio,1B0,1B,1,Península de Setúbal,Península de Setúbal
+1B01508,Palmela,Municipio,1B0,1B,1,Península de Setúbal,Península de Setúbal
+1B01510,Seixal,Municipio,1B0,1B,1,Península de Setúbal,Península de Setúbal
+1B01511,Sesimbra,Municipio,1B0,1B,1,Península de Setúbal,Península de Setúbal
+1B01512,Setúbal,Municipio,1B0,1B,1,Península de Setúbal,Península de Setúbal
+1C10211,Odemira,Municipio,1C1,1C,1,Alentejo Litoral,Alentejo
+1C11501,Alcácer do Sal,Municipio,1C1,1C,1,Alentejo Litoral,Alentejo
+1C11505,Grândola,Municipio,1C1,1C,1,Alentejo Litoral,Alentejo
+1C11509,Santiago do Cacém,Municipio,1C1,1C,1,Alentejo Litoral,Alentejo
+1C11513,Sines,Municipio,1C1,1C,1,Alentejo Litoral,Alentejo
+1C20201,Aljustrel,Municipio,1C2,1C,1,Baixo Alentejo,Alentejo
+1C20202,Almodôvar,Municipio,1C2,1C,1,Baixo Alentejo,Alentejo
+1C20203,Alvito,Municipio,1C2,1C,1,Baixo Alentejo,Alentejo
+1C20204,Barrancos,Municipio,1C2,1C,1,Baixo Alentejo,Alentejo
+1C20205,Beja,Municipio,1C2,1C,1,Baixo Alentejo,Alentejo
+1C20206,Castro Verde,Municipio,1C2,1C,1,Baixo Alentejo,Alentejo
+1C20207,Cuba,Municipio,1C2,1C,1,Baixo Alentejo,Alentejo
+1C20208,Ferreira do Alentejo,Municipio,1C2,1C,1,Baixo Alentejo,Alentejo
+1C20209,Mértola,Municipio,1C2,1C,1,Baixo Alentejo,Alentejo
+1C20210,Moura,Municipio,1C2,1C,1,Baixo Alentejo,Alentejo
+1C20212,Ourique,Municipio,1C2,1C,1,Baixo Alentejo,Alentejo
+1C20213,Serpa,Municipio,1C2,1C,1,Baixo Alentejo,Alentejo
+1C20214,Vidigueira,Municipio,1C2,1C,1,Baixo Alentejo,Alentejo
+1C31201,Alter do Chão,Municipio,1C3,1C,1,Alto Alentejo,Alentejo
+1C31202,Arronches,Municipio,1C3,1C,1,Alto Alentejo,Alentejo
+1C31203,Avis,Municipio,1C3,1C,1,Alto Alentejo,Alentejo
+1C31204,Campo Maior,Municipio,1C3,1C,1,Alto Alentejo,Alentejo
+1C31205,Castelo de Vide,Municipio,1C3,1C,1,Alto Alentejo,Alentejo
+1C31206,Crato,Municipio,1C3,1C,1,Alto Alentejo,Alentejo
+1C31207,Elvas,Municipio,1C3,1C,1,Alto Alentejo,Alentejo
+1C31208,Fronteira,Municipio,1C3,1C,1,Alto Alentejo,Alentejo
+1C31209,Gavião,Municipio,1C3,1C,1,Alto Alentejo,Alentejo
+1C31210,Marvão,Municipio,1C3,1C,1,Alto Alentejo,Alentejo
+1C31211,Monforte,Municipio,1C3,1C,1,Alto Alentejo,Alentejo
+1C31212,Nisa,Municipio,1C3,1C,1,Alto Alentejo,Alentejo
+1C31213,Ponte de Sor,Municipio,1C3,1C,1,Alto Alentejo,Alentejo
+1C31214,Portalegre,Municipio,1C3,1C,1,Alto Alentejo,Alentejo
+1C31215,Sousel,Municipio,1C3,1C,1,Alto Alentejo,Alentejo
+1C40701,Alandroal,Municipio,1C4,1C,1,Alentejo Central,Alentejo
+1C40702,Arraiolos,Municipio,1C4,1C,1,Alentejo Central,Alentejo
+1C40703,Borba,Municipio,1C4,1C,1,Alentejo Central,Alentejo
+1C40704,Estremoz,Municipio,1C4,1C,1,Alentejo Central,Alentejo
+1C40705,Évora,Municipio,1C4,1C,1,Alentejo Central,Alentejo
+1C40706,Montemor-o-Novo,Municipio,1C4,1C,1,Alentejo Central,Alentejo
+1C40707,Mora,Municipio,1C4,1C,1,Alentejo Central,Alentejo
+1C40708,Mourão,Municipio,1C4,1C,1,Alentejo Central,Alentejo
+1C40709,Portel,Municipio,1C4,1C,1,Alentejo Central,Alentejo
+1C40710,Redondo,Municipio,1C4,1C,1,Alentejo Central,Alentejo
+1C40711,Reguengos de Monsaraz,Municipio,1C4,1C,1,Alentejo Central,Alentejo
+1C40712,Vendas Novas,Municipio,1C4,1C,1,Alentejo Central,Alentejo
+1C40713,Viana do Alentejo,Municipio,1C4,1C,1,Alentejo Central,Alentejo
+1C40714,Vila Viçosa,Municipio,1C4,1C,1,Alentejo Central,Alentejo
+1D11001,Alcobaça,Municipio,1D1,1D,1,Oeste,Oeste e Vale do Tejo
+1D11005,Bombarral,Municipio,1D1,1D,1,Oeste,Oeste e Vale do Tejo
+1D11006,Caldas da Rainha,Municipio,1D1,1D,1,Oeste,Oeste e Vale do Tejo
+1D11011,Nazaré,Municipio,1D1,1D,1,Oeste,Oeste e Vale do Tejo
+1D11012,Óbidos,Municipio,1D1,1D,1,Oeste,Oeste e Vale do Tejo
+1D11014,Peniche,Municipio,1D1,1D,1,Oeste,Oeste e Vale do Tejo
+1D11101,Alenquer,Municipio,1D1,1D,1,Oeste,Oeste e Vale do Tejo
+1D11102,Arruda dos Vinhos,Municipio,1D1,1D,1,Oeste,Oeste e Vale do Tejo
+1D11104,Cadaval,Municipio,1D1,1D,1,Oeste,Oeste e Vale do Tejo
+1D11108,Lourinhã,Municipio,1D1,1D,1,Oeste,Oeste e Vale do Tejo
+1D11112,Sobral de Monte Agraço,Municipio,1D1,1D,1,Oeste,Oeste e Vale do Tejo
+1D11113,Torres Vedras,Municipio,1D1,1D,1,Oeste,Oeste e Vale do Tejo
+1D21401,Abrantes,Municipio,1D2,1D,1,Médio Tejo,Oeste e Vale do Tejo
+1D21402,Alcanena,Municipio,1D2,1D,1,Médio Tejo,Oeste e Vale do Tejo
+1D21408,Constância,Municipio,1D2,1D,1,Médio Tejo,Oeste e Vale do Tejo
+1D21410,Entroncamento,Municipio,1D2,1D,1,Médio Tejo,Oeste e Vale do Tejo
+1D21411,Ferreira do Zêzere,Municipio,1D2,1D,1,Médio Tejo,Oeste e Vale do Tejo
+1D21413,Mação,Municipio,1D2,1D,1,Médio Tejo,Oeste e Vale do Tejo
+1D21417,Sardoal,Municipio,1D2,1D,1,Médio Tejo,Oeste e Vale do Tejo
+1D21418,Tomar,Municipio,1D2,1D,1,Médio Tejo,Oeste e Vale do Tejo
+1D21419,Torres Novas,Municipio,1D2,1D,1,Médio Tejo,Oeste e Vale do Tejo
+1D21420,Vila Nova da Barquinha,Municipio,1D2,1D,1,Médio Tejo,Oeste e Vale do Tejo
+1D21421,Ourém,Municipio,1D2,1D,1,Médio Tejo,Oeste e Vale do Tejo
+1D31103,Azambuja,Municipio,1D3,1D,1,Lezíria do Tejo,Oeste e Vale do Tejo
+1D31403,Almeirim,Municipio,1D3,1D,1,Lezíria do Tejo,Oeste e Vale do Tejo
+1D31404,Alpiarça,Municipio,1D3,1D,1,Lezíria do Tejo,Oeste e Vale do Tejo
+1D31405,Benavente,Municipio,1D3,1D,1,Lezíria do Tejo,Oeste e Vale do Tejo
+1D31406,Cartaxo,Municipio,1D3,1D,1,Lezíria do Tejo,Oeste e Vale do Tejo
+1D31407,Chamusca,Municipio,1D3,1D,1,Lezíria do Tejo,Oeste e Vale do Tejo
+1D31409,Coruche,Municipio,1D3,1D,1,Lezíria do Tejo,Oeste e Vale do Tejo
+1D31412,Golegã,Municipio,1D3,1D,1,Lezíria do Tejo,Oeste e Vale do Tejo
+1D31414,Rio Maior,Municipio,1D3,1D,1,Lezíria do Tejo,Oeste e Vale do Tejo
+1D31415,Salvaterra de Magos,Municipio,1D3,1D,1,Lezíria do Tejo,Oeste e Vale do Tejo
+1D31416,Santarém,Municipio,1D3,1D,1,Lezíria do Tejo,Oeste e Vale do Tejo
+2004101,Vila do Porto,Municipio,200,20,2,Região Autónoma dos Açores,Região Autónoma dos Açores
+2004201,Lagoa (R.A.A.),Municipio,200,20,2,Região Autónoma dos Açores,Região Autónoma dos Açores
+2004202,Nordeste,Municipio,200,20,2,Região Autónoma dos Açores,Região Autónoma dos Açores
+2004203,Ponta Delgada,Municipio,200,20,2,Região Autónoma dos Açores,Região Autónoma dos Açores
+2004204,Povoação,Municipio,200,20,2,Região Autónoma dos Açores,Região Autónoma dos Açores
+2004205,Ribeira Grande,Municipio,200,20,2,Região Autónoma dos Açores,Região Autónoma dos Açores
+2004206,Vila Franca do Campo,Municipio,200,20,2,Região Autónoma dos Açores,Região Autónoma dos Açores
+2004301,Angra do Heroísmo,Municipio,200,20,2,Região Autónoma dos Açores,Região Autónoma dos Açores
+2004302,Vila da Praia da Vitória,Municipio,200,20,2,Região Autónoma dos Açores,Região Autónoma dos Açores
+2004401,Santa Cruz da Graciosa,Municipio,200,20,2,Região Autónoma dos Açores,Região Autónoma dos Açores
+2004501,Calheta (R.A.A.),Municipio,200,20,2,Região Autónoma dos Açores,Região Autónoma dos Açores
+2004502,Velas,Municipio,200,20,2,Região Autónoma dos Açores,Região Autónoma dos Açores
+2004601,Lajes do Pico,Municipio,200,20,2,Região Autónoma dos Açores,Região Autónoma dos Açores
+2004602,Madalena,Municipio,200,20,2,Região Autónoma dos Açores,Região Autónoma dos Açores
+2004603,São Roque do Pico,Municipio,200,20,2,Região Autónoma dos Açores,Região Autónoma dos Açores
+2004701,Horta,Municipio,200,20,2,Região Autónoma dos Açores,Região Autónoma dos Açores
+2004801,Lajes das Flores,Municipio,200,20,2,Região Autónoma dos Açores,Região Autónoma dos Açores
+2004802,Santa Cruz das Flores,Municipio,200,20,2,Região Autónoma dos Açores,Região Autónoma dos Açores
+2004901,Corvo,Municipio,200,20,2,Região Autónoma dos Açores,Região Autónoma dos Açores
+3003101,Calheta (R.A.M.),Municipio,300,30,3,Região Autónoma da Madeira,Região Autónoma da Madeira
+3003102,Câmara de Lobos,Municipio,300,30,3,Região Autónoma da Madeira,Região Autónoma da Madeira
+3003103,Funchal,Municipio,300,30,3,Região Autónoma da Madeira,Região Autónoma da Madeira
+3003104,Machico,Municipio,300,30,3,Região Autónoma da Madeira,Região Autónoma da Madeira
+3003105,Ponta do Sol,Municipio,300,30,3,Região Autónoma da Madeira,Região Autónoma da Madeira
+3003106,Porto Moniz,Municipio,300,30,3,Região Autónoma da Madeira,Região Autónoma da Madeira
+3003107,Ribeira Brava,Municipio,300,30,3,Região Autónoma da Madeira,Região Autónoma da Madeira
+3003108,Santa Cruz,Municipio,300,30,3,Região Autónoma da Madeira,Região Autónoma da Madeira
+3003109,Santana,Municipio,300,30,3,Região Autónoma da Madeira,Região Autónoma da Madeira
+3003110,São Vicente,Municipio,300,30,3,Região Autónoma da Madeira,Região Autónoma da Madeira
+3003201,Porto Santo,Municipio,300,30,3,Região Autónoma da Madeira,Região Autónoma da Madeira

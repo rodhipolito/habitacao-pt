@@ -1,0 +1,159 @@
+_Tipo =
+SELECTEDVALUE(dim_tipo[tipo_construcao], "Total")
+
+_Preço base =
+VAR t = [_Tipo]
+RETURN
+	CALCULATE(
+		DIVIDE(
+			SUMX(fact_avaliacao, fact_avaliacao[preco_m2] * fact_avaliacao[n_avaliacoes]),
+			CALCULATE(SUM(fact_avaliacao[n_avaliacoes]), fact_avaliacao[preco_m2] <> BLANK())
+		),
+		dim_tipo[tipo_construcao] = t
+	)
+
+_Avaliações base =
+VAR t = [_Tipo]
+RETURN
+	CALCULATE(SUM(fact_avaliacao[n_avaliacoes]), dim_tipo[tipo_construcao] = t)
+
+Preço €/m² =
+IF(
+	ISCROSSFILTERED(dim_geografia),
+	[_Preço base],
+	CALCULATE([_Preço base], dim_geografia[cod_geo] = "PT")
+)
+
+Avaliações (3 meses) =
+IF(
+	ISCROSSFILTERED(dim_geografia),
+	[_Avaliações base],
+	CALCULATE([_Avaliações base], dim_geografia[cod_geo] = "PT")
+)
+
+Mínimo de avaliações =
+SELECTEDVALUE(param_min_avaliacoes[Valor], 150)
+
+Preço fiável €/m² =
+IF([Avaliações (3 meses)] >= [Mínimo de avaliações], [Preço €/m²])
+
+Último mês =
+MAX(dim_tempo[mes])
+
+Primeiro mês =
+MIN(dim_tempo[mes])
+
+Preço há 12 meses =
+VAR m = MAX(dim_tempo[mes])
+RETURN
+	CALCULATE([Preço €/m²], REMOVEFILTERS(dim_tempo), dim_tempo[mes] = EDATE(m, -12))
+
+Variação homóloga =
+DIVIDE([Preço €/m²] - [Preço há 12 meses], [Preço há 12 meses])
+
+Média móvel 3 meses €/m² =
+VAR m = MAX(dim_tempo[mes])
+RETURN
+	AVERAGEX(
+		FILTER(ALL(dim_tempo[mes]), dim_tempo[mes] <= m && dim_tempo[mes] > EDATE(m, -3)),
+		[Preço €/m²]
+	)
+
+Preço último mês €/m² =
+VAR m = [Último mês]
+RETURN
+	CALCULATE([Preço €/m²], REMOVEFILTERS(dim_tempo), dim_tempo[mes] = m)
+
+Preço primeiro mês €/m² =
+VAR m = [Primeiro mês]
+RETURN
+	CALCULATE([Preço €/m²], REMOVEFILTERS(dim_tempo), dim_tempo[mes] = m)
+
+Variação homóloga último mês =
+VAR m = [Último mês]
+RETURN
+	CALCULATE([Variação homóloga], REMOVEFILTERS(dim_tempo), dim_tempo[mes] = m)
+
+Variação no período =
+DIVIDE([Preço último mês €/m²] - [Preço primeiro mês €/m²], [Preço primeiro mês €/m²])
+
+Avaliações último mês =
+VAR m = [Último mês]
+RETURN
+	CALCULATE([Avaliações (3 meses)], REMOVEFILTERS(dim_tempo), dim_tempo[mes] = m)
+
+Preço fiável último mês €/m² =
+VAR m = [Último mês]
+RETURN
+	CALCULATE([Preço fiável €/m²], REMOVEFILTERS(dim_tempo), dim_tempo[mes] = m)
+
+Municípios com valor =
+VAR m = [Último mês]
+VAR t = [_Tipo]
+RETURN
+	CALCULATE(
+		DISTINCTCOUNT(fact_avaliacao[cod_geo]),
+		REMOVEFILTERS(dim_tempo),
+		dim_tempo[mes] = m,
+		dim_geografia[nivel] = "Municipio",
+		fact_avaliacao[preco_m2] <> BLANK(),
+		dim_tipo[tipo_construcao] = t
+	)
+
+Municípios no ficheiro =
+CALCULATE(DISTINCTCOUNT(dim_geografia[cod_geo]), dim_geografia[nivel] = "Municipio")
+
+Cobertura de municípios =
+DIVIDE([Municípios com valor], [Municípios no ficheiro])
+
+Título do gráfico =
+"Valor mediano de avaliação bancária (€/m²): " & SELECTEDVALUE(dim_geografia[nome_geo], "Portugal")
+
+
+// Página "Ranking municipal"
+
+Preço fiável há 12 meses €/m² =
+VAR m = [Último mês]
+RETURN
+	CALCULATE([Preço fiável €/m²], REMOVEFILTERS(dim_tempo), dim_tempo[mes] = EDATE(m, -12))
+
+Variação homóloga fiável =
+VAR atual = [Preço fiável último mês €/m²]
+VAR anterior = [Preço fiável há 12 meses €/m²]
+RETURN
+	IF(NOT ISBLANK(atual) && NOT ISBLANK(anterior), DIVIDE(atual - anterior, anterior))
+
+Ranking variação =
+VAR v = [Variação homóloga fiável]
+RETURN
+	IF(
+		NOT ISBLANK(v) && HASONEVALUE(dim_geografia[cod_geo]),
+		CALCULATE(
+			RANKX(
+				FILTER(VALUES(dim_geografia[cod_geo]), NOT ISBLANK([Variação homóloga fiável])),
+				[Variação homóloga fiável], v, DESC, Dense
+			),
+			ALLSELECTED(dim_geografia),
+			dim_geografia[nivel] = "Municipio"
+		)
+	)
+
+Municípios no ranking =
+COUNTROWS(
+	FILTER(
+		CALCULATETABLE(VALUES(dim_geografia[cod_geo]), dim_geografia[nivel] = "Municipio"),
+		NOT ISBLANK([Variação homóloga fiável])
+	)
+)
+
+Variação homóloga mediana =
+MEDIANX(
+	FILTER(
+		CALCULATETABLE(VALUES(dim_geografia[cod_geo]), dim_geografia[nivel] = "Municipio"),
+		NOT ISBLANK([Variação homóloga fiável])
+	),
+	[Variação homóloga fiável]
+)
+
+// Coluna calculada em dim_geografia (categoria de dados: Local)
+local_mapa = dim_geografia[nome_geo] & ", " & dim_geografia[nome_nuts2] & ", Portugal"

@@ -1,0 +1,58 @@
+table dim_tempo
+	lineageTag: 6253593f-d7b6-47e0-a92f-79968b127049
+
+	column mes
+		dataType: dateTime
+		formatString: mmm yyyy
+		lineageTag: fba3d6bd-20fd-43c8-a5cd-25aaaef0a932
+		summarizeBy: none
+		sourceColumn: mes
+
+		variation Variation
+			isDefault
+			relationship: dd399c3b-3095-47fe-a68d-d9525eb4855d
+			defaultHierarchy: LocalDateTable_3d961a3b-251e-4a6d-a359-29f4583ba5e1.'Date Hierarchy'
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ano
+		dataType: int64
+		formatString: 0
+		lineageTag: a53346ce-95f1-420e-bf5d-774e5a1c6bf8
+		summarizeBy: sum
+		sourceColumn: ano
+
+		annotation SummarizationSetBy = Automatic
+
+	column mes_num
+		dataType: int64
+		formatString: 0
+		lineageTag: c6875189-65c0-43dd-a212-87ca139e2100
+		summarizeBy: sum
+		sourceColumn: mes_num
+
+		annotation SummarizationSetBy = Automatic
+
+	column nome_mes
+		dataType: string
+		lineageTag: 159f1cf3-adbb-484c-af5e-1b268c46dd80
+		summarizeBy: none
+		sourceColumn: nome_mes
+		sortByColumn: mes_num
+
+	column ano_mes
+		dataType: string
+		lineageTag: c502d093-40ea-4914-9b1c-2db49c2660a0
+		summarizeBy: none
+		sourceColumn: ano_mes
+
+	partition dim_tempo = m
+		mode: import
+		source =
+				let
+					Fonte = Csv.Document(File.Contents(Pasta & "dim_tempo.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+					Tipos = Table.TransformColumnTypes(Cabecalho, {{"mes", type date},{"ano", Int64.Type},{"mes_num", Int64.Type},{"nome_mes", type text},{"ano_mes", type text}}, "en-US")
+				in
+					Tipos
+

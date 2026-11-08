@@ -1,0 +1,5 @@
+expression Pasta = "C:\Users\rodri\Desktop\projetopbi\dados\" meta [IsParameterQuery=true, IsParameterQueryRequired=true, Type="Text"]
+	lineageTag: c39c4821-ff29-46a4-b9f5-9fb38ed52092
+
+	annotation PBI_ResultType = Text
+

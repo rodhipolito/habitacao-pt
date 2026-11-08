@@ -1,0 +1,16 @@
+# Power BI (ficheiros locais e cache do projeto PBIP)
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+
+# Notas e configuração pessoais
+NOTAS-diagnostico.md
+.mcp.json
+
+# Ficheiros antigos ou intermédios
+*.pbix
+*.pdf
+Claude outputs/
+
+# Cópia de publicação do Vercel (gerada a partir de web/index.html)
+web/habitacao-pt/
+.vercel

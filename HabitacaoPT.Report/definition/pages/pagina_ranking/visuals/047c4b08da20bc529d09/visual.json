@@ -1,0 +1,355 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "047c4b08da20bc529d09",
+  "position": {
+    "x": 1243.2370729153031,
+    "y": 220.77863594711351,
+    "z": 11001,
+    "height": 859.58895143343375,
+    "width": 637.000654535934,
+    "tabOrder": 11001
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Ranking variação"
+                }
+              },
+              "queryRef": "_Medidas.Ranking variação",
+              "nativeQueryRef": "Ranking variação"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_geografia"
+                    }
+                  },
+                  "Property": "nome_geo"
+                }
+              },
+              "queryRef": "dim_geografia.nome_geo",
+              "nativeQueryRef": "nome_geo"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_geografia"
+                    }
+                  },
+                  "Property": "nome_nuts3"
+                }
+              },
+              "queryRef": "dim_geografia.nome_nuts3",
+              "nativeQueryRef": "nome_nuts3"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Preço fiável há 12 meses €/m²"
+                }
+              },
+              "queryRef": "_Medidas.Preço fiável há 12 meses €/m²",
+              "nativeQueryRef": "Preço fiável há 12 meses €/m²"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Preço fiável último mês €/m²"
+                }
+              },
+              "queryRef": "_Medidas.Preço fiável último mês €/m²",
+              "nativeQueryRef": "Preço fiável último mês €/m²"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Variação homóloga fiável"
+                }
+              },
+              "queryRef": "_Medidas.Variação homóloga fiável",
+              "nativeQueryRef": "Variação homóloga fiável"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Avaliações último mês"
+                }
+              },
+              "queryRef": "_Medidas.Avaliações último mês",
+              "nativeQueryRef": "Avaliações último mês"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_Medidas"
+                  }
+                },
+                "Property": "Ranking variação"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Ranking completo'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "ca8bbdb1c79e62c09412",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Medidas"
+              }
+            },
+            "Property": "Ranking variação"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "da36ebc2ca6169cb4d94",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_geografia"
+              }
+            },
+            "Property": "nome_geo"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "39ccff23d131a8c28b7e",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_geografia"
+              }
+            },
+            "Property": "nome_nuts3"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "40f314b944be1921258d",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Medidas"
+              }
+            },
+            "Property": "Preço fiável há 12 meses €/m²"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "549f673a21190bd8eb67",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Medidas"
+              }
+            },
+            "Property": "Preço fiável último mês €/m²"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "8a68e05131208cd007ce",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Medidas"
+              }
+            },
+            "Property": "Variação homóloga fiável"
+          }
+        },
+        "type": "Advanced",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "m",
+              "Entity": "_Medidas",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "Not": {
+                  "Expression": {
+                    "Comparison": {
+                      "ComparisonKind": 0,
+                      "Left": {
+                        "Measure": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Source": "m"
+                            }
+                          },
+                          "Property": "Variação homóloga fiável"
+                        }
+                      },
+                      "Right": {
+                        "Literal": {
+                          "Value": "null"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "313d91674852d74eaa60",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Medidas"
+              }
+            },
+            "Property": "Avaliações último mês"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "f6377d5ac0dec61705d2",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_geografia"
+              }
+            },
+            "Property": "nivel"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "d",
+              "Entity": "dim_geografia",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "d"
+                          }
+                        },
+                        "Property": "nivel"
+                      }
+                    }
+                  ],
+                  "Values": [
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'Municipio'"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

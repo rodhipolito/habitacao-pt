@@ -1,0 +1,26 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: pt-PT
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_ProTooling = ["DevMode"]
+
+annotation PBI_QueryOrder = ["fact_avaliacao","dim_geografia","dim_tempo","dim_tipo","_Medidas","Pasta"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+ref table fact_avaliacao
+ref table dim_geografia
+ref table dim_tempo
+ref table dim_tipo
+ref table param_min_avaliacoes
+ref table _Medidas
+ref table DateTableTemplate_f3b005ee-0169-4a29-82e6-ec9a9b187ec6
+ref table LocalDateTable_3d961a3b-251e-4a6d-a359-29f4583ba5e1
+
+ref cultureInfo en-US
+

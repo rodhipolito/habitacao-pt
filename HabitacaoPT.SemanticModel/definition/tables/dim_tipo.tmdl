@@ -1,0 +1,27 @@
+table dim_tipo
+	lineageTag: e7dca909-810a-4c3c-9f83-8440b30db237
+
+	column tipo_construcao
+		dataType: string
+		lineageTag: 05a20911-45ea-4fc2-bd10-f272b3c09d18
+		summarizeBy: none
+		sourceColumn: tipo_construcao
+		sortByColumn: ordem
+
+	column ordem
+		dataType: int64
+		formatString: 0
+		lineageTag: 0ba3a346-73a1-44c6-a532-f1bd888e9a6c
+		summarizeBy: none
+		sourceColumn: ordem
+
+	partition dim_tipo = m
+		mode: import
+		source =
+				let
+					Fonte = Csv.Document(File.Contents(Pasta & "dim_tipo.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+					Tipos = Table.TransformColumnTypes(Cabecalho, {{"tipo_construcao", type text},{"ordem", Int64.Type}}, "en-US")
+				in
+					Tipos
+

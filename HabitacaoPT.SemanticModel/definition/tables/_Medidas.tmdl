@@ -1,0 +1,217 @@
+table _Medidas
+	lineageTag: c3ae5bb2-3440-4db1-94d2-53a96c36f917
+
+	measure _Tipo = SELECTEDVALUE(dim_tipo[tipo_construcao], "Total")
+		isHidden
+		lineageTag: 09e0b3e9-66f4-4362-9dc1-bb2c0dcd888e
+
+	measure '_Preço base' =
+			VAR t = [_Tipo]
+			RETURN
+				CALCULATE(
+					DIVIDE(
+						SUMX(fact_avaliacao, fact_avaliacao[preco_m2] * fact_avaliacao[n_avaliacoes]),
+						CALCULATE(SUM(fact_avaliacao[n_avaliacoes]), fact_avaliacao[preco_m2] <> BLANK())
+					),
+					dim_tipo[tipo_construcao] = t
+				)
+		formatString: 0
+		isHidden
+		lineageTag: 5206530f-caf5-4439-bb5b-a95cd88ff3ca
+
+	measure '_Avaliações base' =
+			VAR t = [_Tipo]
+			RETURN
+				CALCULATE(SUM(fact_avaliacao[n_avaliacoes]), dim_tipo[tipo_construcao] = t)
+		formatString: #,0
+		isHidden
+		lineageTag: c0a39f5b-a389-4952-8734-d4dcd5f3f518
+
+	measure 'Preço €/m²' =
+			IF(
+				ISCROSSFILTERED(dim_geografia),
+				[_Preço base],
+				CALCULATE([_Preço base], dim_geografia[cod_geo] = "PT")
+			)
+		formatString: #,0
+		lineageTag: 9dd7b572-6755-4927-a9f3-424569228620
+
+	measure 'Avaliações (3 meses)' =
+			IF(
+				ISCROSSFILTERED(dim_geografia),
+				[_Avaliações base],
+				CALCULATE([_Avaliações base], dim_geografia[cod_geo] = "PT")
+			)
+		formatString: #,0
+		lineageTag: 06b92bc9-6c3d-4c66-bce2-b3c4d68c962f
+
+	measure 'Mínimo de avaliações' = SELECTEDVALUE(param_min_avaliacoes[Valor], 150)
+		formatString: 0
+		lineageTag: 8ca1265a-b9fd-435c-b6b4-7e40094d01d5
+
+	measure 'Preço fiável €/m²' = IF([Avaliações (3 meses)] >= [Mínimo de avaliações], [Preço €/m²])
+		formatString: #,0
+		lineageTag: 2cb90bf5-6757-4cfa-997a-4226986a5090
+
+	measure 'Último mês' = MAX(dim_tempo[mes])
+		formatString: mmm yyyy
+		lineageTag: 67eb6ecb-7181-45a2-9148-3aa1d876dd7c
+
+	measure 'Primeiro mês' = MIN(dim_tempo[mes])
+		formatString: mmm yyyy
+		lineageTag: ac483d0e-dfad-4d61-bafd-577ca339486a
+
+	measure 'Preço há 12 meses' =
+			VAR m = MAX(dim_tempo[mes])
+			RETURN
+				CALCULATE([Preço €/m²], REMOVEFILTERS(dim_tempo), dim_tempo[mes] = EDATE(m, -12))
+		formatString: #,0
+		lineageTag: 54a58207-f52b-4271-a1e6-948c749b5ffb
+
+	measure 'Variação homóloga' = DIVIDE([Preço €/m²] - [Preço há 12 meses], [Preço há 12 meses])
+		formatString: +0.0%;-0.0%;0.0%
+		lineageTag: 02a3060c-7e5c-40fa-b9e4-1595d06fb430
+
+	measure 'Média móvel 3 meses €/m²' =
+			VAR m = MAX(dim_tempo[mes])
+			RETURN
+				AVERAGEX(
+					FILTER(ALL(dim_tempo[mes]), dim_tempo[mes] <= m && dim_tempo[mes] > EDATE(m, -3)),
+					[Preço €/m²]
+				)
+		formatString: #,0
+		lineageTag: 06d2b83f-500c-442c-924b-26ff52696e6b
+
+	measure 'Preço último mês €/m²' =
+			VAR m = [Último mês]
+			RETURN
+				CALCULATE([Preço €/m²], REMOVEFILTERS(dim_tempo), dim_tempo[mes] = m)
+		formatString: #,0
+		lineageTag: c7d5e52f-f0a4-4e35-bbb9-1c1ab7149f9d
+
+	measure 'Preço primeiro mês €/m²' =
+			VAR m = [Primeiro mês]
+			RETURN
+				CALCULATE([Preço €/m²], REMOVEFILTERS(dim_tempo), dim_tempo[mes] = m)
+		formatString: #,0
+		lineageTag: 8a8a5be2-518e-4273-8180-6d3a7ed1581d
+
+	measure 'Variação homóloga último mês' =
+			VAR m = [Último mês]
+			RETURN
+				CALCULATE([Variação homóloga], REMOVEFILTERS(dim_tempo), dim_tempo[mes] = m)
+		formatString: +0.0%;-0.0%;0.0%
+		lineageTag: 350a9364-2df4-48fd-843e-a72b92524f84
+
+	measure 'Variação no período' = DIVIDE([Preço último mês €/m²] - [Preço primeiro mês €/m²], [Preço primeiro mês €/m²])
+		formatString: +0.0%;-0.0%;0.0%
+		lineageTag: 49c682a0-ec03-477c-98f6-673c8e84757d
+
+	measure 'Avaliações último mês' =
+			VAR m = [Último mês]
+			RETURN
+				CALCULATE([Avaliações (3 meses)], REMOVEFILTERS(dim_tempo), dim_tempo[mes] = m)
+		formatString: #,0
+		lineageTag: aab84993-df25-4144-8ca9-316286d79812
+
+	measure 'Preço fiável último mês €/m²' =
+			VAR m = [Último mês]
+			RETURN
+				CALCULATE([Preço fiável €/m²], REMOVEFILTERS(dim_tempo), dim_tempo[mes] = m)
+		formatString: #,0
+		lineageTag: 22eee860-0cc7-4ef6-8a32-4a42881cf54a
+
+	measure 'Municípios com valor' =
+			VAR m = [Último mês]
+			VAR t = [_Tipo]
+			RETURN
+				CALCULATE(
+					DISTINCTCOUNT(fact_avaliacao[cod_geo]),
+					REMOVEFILTERS(dim_tempo),
+					dim_tempo[mes] = m,
+					dim_geografia[nivel] = "Municipio",
+					fact_avaliacao[preco_m2] <> BLANK(),
+					dim_tipo[tipo_construcao] = t
+				)
+		formatString: 0
+		lineageTag: 53321123-79ff-48c7-a643-fddc127d09d6
+
+	measure 'Municípios no ficheiro' = CALCULATE(DISTINCTCOUNT(dim_geografia[cod_geo]), dim_geografia[nivel] = "Municipio")
+		formatString: 0
+		lineageTag: 0b8f0bbd-a8bb-4bfa-8193-2886fadcd0eb
+
+	measure 'Cobertura de municípios' = DIVIDE([Municípios com valor], [Municípios no ficheiro])
+		formatString: 0%
+		lineageTag: f061e862-85c0-4c67-971d-650f3dba01f2
+
+	measure 'Título do gráfico' = "Valor mediano de avaliação bancária (€/m²): " & SELECTEDVALUE(dim_geografia[nome_geo], "Portugal")
+		lineageTag: bb15cb92-58b1-4d8c-89a3-9303ff037e1f
+
+	measure 'Preço fiável há 12 meses €/m²' =
+			VAR m = [Último mês]
+			RETURN
+				CALCULATE([Preço fiável €/m²], REMOVEFILTERS(dim_tempo), dim_tempo[mes] = EDATE(m, -12))
+		formatString: #,0
+		lineageTag: 8a99c4d9-ce60-41cb-b297-180452688213
+
+	measure 'Variação homóloga fiável' =
+			VAR atual = [Preço fiável último mês €/m²]
+			VAR anterior = [Preço fiável há 12 meses €/m²]
+			RETURN
+				IF(NOT ISBLANK(atual) && NOT ISBLANK(anterior), DIVIDE(atual - anterior, anterior))
+		formatString: +0.0%;-0.0%;0.0%
+		lineageTag: f62065ab-ac5b-48cf-8639-8a8c7e0c8de8
+
+	measure 'Ranking variação' =
+			VAR v = [Variação homóloga fiável]
+			RETURN
+				IF(
+					NOT ISBLANK(v) && HASONEVALUE(dim_geografia[cod_geo]),
+					CALCULATE(
+						RANKX(
+							FILTER(VALUES(dim_geografia[cod_geo]), NOT ISBLANK([Variação homóloga fiável])),
+							[Variação homóloga fiável], v, DESC, Dense
+						),
+						ALLSELECTED(dim_geografia),
+						dim_geografia[nivel] = "Municipio"
+					)
+				)
+		formatString: 0
+		lineageTag: 3a0e2f5b-d3e4-4390-9e1f-f716a6fbcb0d
+
+	measure 'Municípios no ranking' =
+			COUNTROWS(
+				FILTER(
+					CALCULATETABLE(VALUES(dim_geografia[cod_geo]), dim_geografia[nivel] = "Municipio"),
+					NOT ISBLANK([Variação homóloga fiável])
+				)
+			)
+		formatString: 0
+		lineageTag: 927799ce-4a9b-40fa-8bfd-6a23e426073e
+
+	measure 'Variação homóloga mediana' =
+			MEDIANX(
+				FILTER(
+					CALCULATETABLE(VALUES(dim_geografia[cod_geo]), dim_geografia[nivel] = "Municipio"),
+					NOT ISBLANK([Variação homóloga fiável])
+				),
+				[Variação homóloga fiável]
+			)
+		formatString: +0.0%;-0.0%;0.0%
+		lineageTag: 93069997-6aa9-435e-a85d-95e9352e0e55
+
+	column Coluna
+		dataType: string
+		isHidden
+		lineageTag: d21254d9-b813-4e01-b275-0ed8db03ee5d
+		summarizeBy: none
+		sourceColumn: Coluna
+
+	partition _Medidas = m
+		mode: import
+		source =
+				let
+					Fonte = #table(type table [Coluna = text], {})
+				in
+					Fonte
+
