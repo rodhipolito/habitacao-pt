@@ -10,6 +10,8 @@ A Power BI report on the median value per m² that banks assign when appraising 
 | --- | --- |
 | ![Power BI overview page](docs/img/powerbi-pagina1.png) | ![Web dashboard](docs/img/web-dashboard.png) |
 
+![Power BI: appraisal vs sale price page](docs/img/powerbi-vendas.png)
+
 ## What the report answers
 
 - How much is a square metre of housing worth in each municipality, according to bank appraisals?
