@@ -28,7 +28,8 @@
               },
               "queryRef": "fact_vendas.categoria",
               "nativeQueryRef": "categoria",
-              "active": true
+              "active": true,
+              "displayName": "Categoria da venda"
             }
           ]
         }

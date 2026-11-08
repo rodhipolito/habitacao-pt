@@ -111,13 +111,13 @@ The full DAX is in [medidas.dax](medidas.dax).
 
 ## Web version
 
-The web version recomputes the same measures in JavaScript from the same CSVs, with D3.js for the chart and map. To regenerate it after changing the data:
+The web version recomputes the same measures in JavaScript from the same CSVs, with D3.js for the charts and map. It includes the appraisal vs. sale price comparison. To regenerate it after changing the data:
 
 ```bash
 node web/build.js
 ```
 
-It writes `web/index.html`, a single self-contained page. The build script also prints a check against the Power BI figures (national value, number of ranked municipalities, median and top three).
+It writes `web/index.html`, a single self-contained page. The build script also prints a check against the Power BI figures (national value, number of ranked municipalities, median and top three, and the national sale price, appraisal gap and number of comparable municipalities). To refresh the sale prices first, run `python etl/fact_vendas.py`.
 
 ## License
 

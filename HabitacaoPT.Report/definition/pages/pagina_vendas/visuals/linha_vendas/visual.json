@@ -4,7 +4,7 @@
   "position": {
     "x": 40,
     "y": 360,
-    "width": 1100,
+    "width": 900,
     "height": 420,
     "z": 13000,
     "tabOrder": 13000
@@ -28,7 +28,8 @@
               },
               "queryRef": "fact_vendas.trimestre_label",
               "nativeQueryRef": "trimestre_label",
-              "active": true
+              "active": true,
+              "displayName": "Trimestre"
             }
           ]
         },
@@ -46,7 +47,8 @@
                 }
               },
               "queryRef": "_Medidas.Preço venda €/m²",
-              "nativeQueryRef": "Preço venda €/m²"
+              "nativeQueryRef": "Preço venda €/m²",
+              "displayName": "Preço de venda (12 meses)"
             },
             {
               "field": {
@@ -60,7 +62,8 @@
                 }
               },
               "queryRef": "_Medidas.Avaliação 12 meses €/m²",
-              "nativeQueryRef": "Avaliação 12 meses €/m²"
+              "nativeQueryRef": "Avaliação 12 meses €/m²",
+              "displayName": "Avaliação bancária (média 12 meses)"
             }
           ]
         }
@@ -109,6 +112,19 @@
             }
           }
         }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
       ]
     },
     "objects": {
@@ -119,6 +135,39 @@
               "expr": {
                 "Literal": {
                   "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryAxis": [
+        {
+          "properties": {
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "legend": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "position": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Top'"
                 }
               }
             }

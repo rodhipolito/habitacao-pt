@@ -2,9 +2,9 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "tabela_municipios",
   "position": {
-    "x": 1160,
+    "x": 960,
     "y": 360,
-    "width": 720,
+    "width": 920,
     "height": 580,
     "z": 14000,
     "tabOrder": 14000
@@ -27,21 +27,8 @@
                 }
               },
               "queryRef": "dim_geografia.nome_geo",
-              "nativeQueryRef": "nome_geo"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_geografia"
-                    }
-                  },
-                  "Property": "nome_nuts3"
-                }
-              },
-              "queryRef": "dim_geografia.nome_nuts3",
-              "nativeQueryRef": "nome_nuts3"
+              "nativeQueryRef": "nome_geo",
+              "displayName": "Município"
             },
             {
               "field": {
@@ -55,7 +42,8 @@
                 }
               },
               "queryRef": "_Medidas.Preço venda €/m²",
-              "nativeQueryRef": "Preço venda €/m²"
+              "nativeQueryRef": "Preço venda €/m²",
+              "displayName": "Venda €/m²"
             },
             {
               "field": {
@@ -69,7 +57,8 @@
                 }
               },
               "queryRef": "_Medidas.Avaliação 12 meses €/m²",
-              "nativeQueryRef": "Avaliação 12 meses €/m²"
+              "nativeQueryRef": "Avaliação 12 meses €/m²",
+              "displayName": "Avaliação €/m²"
             },
             {
               "field": {
@@ -83,7 +72,8 @@
                 }
               },
               "queryRef": "_Medidas.Diferença avaliação vs venda",
-              "nativeQueryRef": "Diferença avaliação vs venda"
+              "nativeQueryRef": "Diferença avaliação vs venda",
+              "displayName": "Diferença"
             },
             {
               "field": {
@@ -97,7 +87,8 @@
                 }
               },
               "queryRef": "_Medidas.Variação homóloga venda",
-              "nativeQueryRef": "Variação homóloga venda"
+              "nativeQueryRef": "Variação homóloga venda",
+              "displayName": "Var. venda 12m"
             },
             {
               "field": {
@@ -111,7 +102,8 @@
                 }
               },
               "queryRef": "_Medidas.Vendas 12 meses",
-              "nativeQueryRef": "Vendas 12 meses"
+              "nativeQueryRef": "Vendas 12 meses",
+              "displayName": "N.º vendas"
             }
           ]
         }
@@ -149,7 +141,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Municípios: venda, avaliação e diferença (último trimestre)'"
+                  "Value": "'Municípios com avaliação e venda comparáveis (desce o mínimo de avaliações para ver mais)'"
                 }
               }
             }
@@ -157,7 +149,22 @@
         }
       ]
     },
-    "drillFilterOtherVisuals": true
+    "drillFilterOtherVisuals": true,
+    "objects": {
+      "total": [
+        {
+          "properties": {
+            "totals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
   },
   "filterConfig": {
     "filters": [
@@ -208,6 +215,59 @@
                       }
                     ]
                   ]
+                }
+              }
+            }
+          ]
+        },
+        "howCreated": "User"
+      },
+      {
+        "name": "f_comparavel",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Medidas"
+              }
+            },
+            "Property": "Diferença avaliação vs venda"
+          }
+        },
+        "type": "Advanced",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "m",
+              "Entity": "_Medidas",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "Not": {
+                  "Expression": {
+                    "Comparison": {
+                      "ComparisonKind": 0,
+                      "Left": {
+                        "Measure": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Source": "m"
+                            }
+                          },
+                          "Property": "Diferença avaliação vs venda"
+                        }
+                      },
+                      "Right": {
+                        "Literal": {
+                          "Value": "null"
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }

@@ -29,7 +29,22 @@ for (const [cod, mes, tipo, preco, n] of fact) {
   if (n !== '') series[tipo][gi][1][mi] = +n;
 }
 
-const data = { m: meses, g: geos, s: series };
+// Vendas (INE, preços da habitação ao nível local): trimestral, janela de 12 meses.
+// Por geografia: [preço Total, n.º de vendas, preço Novos, preço Existentes], um valor por trimestre.
+const vendasRows = csv('fact_vendas.csv'); vendasRows.shift();
+const trimestres = [...new Set(vendasRows.map(r => r[1].slice(0, 7)))].sort();
+const trimIdx = new Map(trimestres.map((q, i) => [q, i]));
+const vendas = geos.map(() => [0, 1, 2, 3].map(() => trimestres.map(() => null)));
+const catCol = { Total: 0, Novos: 2, Existentes: 3 };
+for (const [cod, trim, , cat, preco, n] of vendasRows) {
+  const gi = geoIdx.get(cod);
+  if (gi === undefined || catCol[cat] === undefined) continue;
+  const qi = trimIdx.get(trim.slice(0, 7));
+  if (preco !== '') vendas[gi][catCol[cat]][qi] = +preco;
+  if (cat === 'Total' && n !== '') vendas[gi][1][qi] = +n;
+}
+
+const data = { m: meses, g: geos, s: series, vq: trimestres, v: vendas };
 const topo = fs.readFileSync(path.join(root, 'mapas', 'municipios_pt.json'), 'utf8');
 
 // Conferência com o Power BI: último mês, Total, mínimo 150.
@@ -45,6 +60,25 @@ const topo = fs.readFileSync(path.join(root, 'mapas', 'municipios_pt.json'), 'ut
   const med = vs.length % 2 ? vs[(vs.length - 1) / 2] : (vs[vs.length / 2 - 1] + vs[vs.length / 2]) / 2;
   console.log('PT preço', s[0][0][last], 'yoy', (s[0][0][last] / s[0][0][last - 12] - 1).toFixed(3),
     '| ranking', rows.length, 'mediana', med.toFixed(3), '| top3', rows.slice(0, 3).map(r => r.nome + ' ' + r.v.toFixed(3)).join(', '));
+}
+
+// Conferência com o Power BI, página "Avaliação vs venda": último trimestre, mínimo 150.
+{
+  const qi = trimestres.length - 1;
+  const mi = meses.indexOf(trimestres[qi]);
+  const aval12 = gi => {
+    const v = [];
+    for (let k = Math.max(0, mi - 11); k <= mi; k++) {
+      const p = series.Total[gi][0][k], n = series.Total[gi][1][k];
+      if (p != null && n != null && n >= 150) v.push(p);
+    }
+    return v.length >= 6 ? v.reduce((a, b) => a + b, 0) / v.length : null;
+  };
+  const dif = gi => { const a = aval12(gi), v = vendas[gi][0][qi]; return a != null && v != null ? a / v - 1 : null; };
+  const ds = geos.slice(1).map((g, k) => dif(k + 1)).filter(v => v != null).sort((a, b) => a - b);
+  const med = ds.length % 2 ? ds[(ds.length - 1) / 2] : (ds[ds.length / 2 - 1] + ds[ds.length / 2]) / 2;
+  console.log('Vendas', trimestres[qi], '| PT venda', vendas[0][0][qi], 'n', vendas[0][1][qi],
+    '| aval 12m', aval12(0)?.toFixed(2), 'dif', dif(0)?.toFixed(3), '| comparáveis', ds.length, 'mediana', med.toFixed(3));
 }
 
 const template = fs.readFileSync(path.join(__dirname, 'template.html'), 'utf8');

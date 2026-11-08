@@ -1,6 +1,6 @@
 <title>Habitação em Portugal</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Valor mediano de avaliação bancária da habitação em Portugal, por município, com dados do INE. Median bank appraisal value of housing in Portugal by municipality.">
+<meta name="description" content="Valor mediano de avaliação bancária e preço de venda da habitação em Portugal, por município, com dados do INE. Median bank appraisal value and sale price of housing in Portugal by municipality.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
@@ -20,6 +20,7 @@
   --compare: #8796a5;
   --warn: #9a5b00;
   --warn-soft: #fbeedb;
+  --aval: #c05a14;
   --display: "Archivo", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
   --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
@@ -29,13 +30,13 @@
   :root:not([data-theme="light"]) {
     --bg: #0d141b; --surface: #141e28; --ink: #e5ecf2; --muted: #92a3b4; --line: #25333f;
     --accent: #84aefc; --accent-soft: rgba(132, 174, 252, 0.14); --seq-lo: #1c2f45; --seq-hi: #9cc8ff;
-    --na: #1b2631; --compare: #7d8d9d; --warn: #f2b45c; --warn-soft: #3a2a12; color-scheme: dark;
+    --na: #1b2631; --compare: #7d8d9d; --warn: #f2b45c; --warn-soft: #3a2a12; --aval: #f0a35e; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #0d141b; --surface: #141e28; --ink: #e5ecf2; --muted: #92a3b4; --line: #25333f;
   --accent: #84aefc; --accent-soft: rgba(132, 174, 252, 0.14); --seq-lo: #1c2f45; --seq-hi: #9cc8ff;
-  --na: #1b2631; --compare: #7d8d9d; --warn: #f2b45c; --warn-soft: #3a2a12; color-scheme: dark;
+  --na: #1b2631; --compare: #7d8d9d; --warn: #f2b45c; --warn-soft: #3a2a12; --aval: #f0a35e; color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
@@ -112,9 +113,15 @@ main { display: grid; gap: 28px; padding-block: 24px 48px; }
 .legend i.dot { width: 9px; height: 9px; border: 2px solid var(--accent); border-radius: 50%; background: var(--surface); }
 .linkbtn { font: 500 13px var(--body); color: var(--accent); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 
-#chart { position: relative; width: 100%; height: 300px; }
-#chart svg, #map svg { display: block; width: 100%; height: auto; overflow: visible; }
-#chart text, #map text { font-family: var(--body); }
+#chart, #vchart { position: relative; width: 100%; height: 300px; }
+.legend i.av { border-top-color: var(--aval); }
+td.dpos { color: var(--aval); font-weight: 600; }
+.vduo { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+.vcol { display: grid; gap: 10px; min-width: 0; }
+.vduo .table-scroll { max-height: 360px; }
+.vduo table { min-width: 480px; }
+#chart svg, #vchart svg, #map svg { display: block; width: 100%; height: auto; overflow: visible; }
+#chart text, #vchart text, #map text { font-family: var(--body); }
 .axis text { fill: var(--muted); font-size: 11px; }
 .grid line { stroke: var(--line); }
 #map { position: relative; }
@@ -159,7 +166,7 @@ footer a { color: var(--accent); }
 
 @media (max-width: 1000px) {
   .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .duo { grid-template-columns: minmax(0, 1fr); }
+  .duo, .vduo { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 620px) {
   .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -256,6 +263,44 @@ footer a { color: var(--accent); }
       </table>
     </div>
   </section>
+
+  <section class="panel" aria-labelledby="h-venda">
+    <div class="panel-head">
+      <h2 id="h-venda"></h2>
+      <div class="field">
+        <span class="label" id="l-cat" data-i18n="vCat"></span>
+        <div class="seg" role="radiogroup" aria-labelledby="l-cat" id="f-cat">
+          <button type="button" role="radio" data-cat="Total" aria-checked="true" data-i18n="cTotal"></button>
+          <button type="button" role="radio" data-cat="Novos" aria-checked="false" data-i18n="cNovos"></button>
+          <button type="button" role="radio" data-cat="Existentes" aria-checked="false" data-i18n="cExist"></button>
+        </div>
+      </div>
+    </div>
+    <p class="note" id="v-note"></p>
+    <div class="kpis" data-i18n-aria="vKpisAria">
+      <div class="kpi"><span class="k-label" data-i18n="vkPreco"></span><span class="k-value" id="vk-preco">–</span><span class="k-sub" id="vk-preco-sub"></span></div>
+      <div class="kpi"><span class="k-label" data-i18n="vkYoy"></span><span class="k-value" id="vk-yoy">–</span><span class="k-sub" id="vk-yoy-sub"></span></div>
+      <div class="kpi"><span class="k-label" data-i18n="vkN"></span><span class="k-value" id="vk-n">–</span><span class="k-sub" id="vk-n-sub"></span></div>
+      <div class="kpi"><span class="k-label" data-i18n="vkAval"></span><span class="k-value" id="vk-aval">–</span><span class="k-sub" id="vk-aval-sub"></span></div>
+      <div class="kpi"><span class="k-label" data-i18n="vkDif"></span><span class="k-value" id="vk-dif">–</span><span class="k-sub" id="vk-dif-sub"></span></div>
+    </div>
+    <div class="vduo">
+      <div class="vcol">
+        <div class="legend" id="vchart-legend"></div>
+        <div id="vchart"></div>
+      </div>
+      <div class="vcol">
+        <div class="rank-stats"><span><b id="v-n">–</b><span data-i18n="vStatN"></span></span><span><b id="v-med">–</b><span data-i18n="vStatMed"></span></span></div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th data-i18n="thMun"></th><th class="r" data-i18n="thVenda"></th><th class="r" data-i18n="thAval12"></th><th class="r" data-i18n="thDif"></th><th class="r" data-i18n="thVendas"></th></tr></thead>
+            <tbody id="v-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <p class="note" data-i18n="vMethod"></p>
+  </section>
 </main>
 
 <footer class="wrap">
@@ -273,9 +318,9 @@ footer a { color: var(--accent); }
   const I18N = {
     pt: {
       title: 'Habitação em Portugal',
-      eyebrow: 'INE · Avaliação bancária na habitação',
+      eyebrow: 'INE · Avaliação bancária e preços da habitação',
       h1: 'Quanto vale o metro quadrado <span>em Portugal</span>',
-      lede: 'Valor mediano por m² atribuído pelos bancos nas avaliações para crédito à habitação, por município, de janeiro de 2024 a setembro de 2026. São avaliações bancárias, não preços de venda.',
+      lede: 'Valor mediano por m² atribuído pelos bancos nas avaliações para crédito à habitação, por município, de janeiro de 2024 a setembro de 2026, comparado no fim da página com o preço a que as casas se vendem realmente.',
       local: 'Local', tipo: 'Tipo de habitação', tTotal: 'Total', tApartamentos: 'Apartamentos', tMoradias: 'Moradias',
       mes: 'Mês de referência', min: 'Mínimo de avaliações', kpisAria: 'Indicadores do local selecionado',
       kPreco: 'Valor mediano', kYoy: 'Variação homóloga', kPer: 'Variação desde jan. 2024', kAval: 'Avaliações (3 meses)', kCob: 'Municípios com valor',
@@ -289,7 +334,16 @@ footer a { color: var(--accent); }
       rankTitle: 'Ranking municipal', statN: 'municípios', statMed: 'mediana', search: 'Procurar município', searchPh: 'Ex.: Braga',
       rankNote: '{a} face a {b}, mínimo de {n} avaliações', thMun: 'Município', thVar: 'Variação', thAval: 'Avaliações',
       emptyQ: 'Nenhum município com esse nome no ranking.', emptyMin: 'Nenhum município cumpre o mínimo de avaliações. Baixa o mínimo para ver o ranking.',
-      fSource: '<strong>Fonte:</strong> INE, Inquérito à avaliação bancária na habitação (valores medianos, médias móveis de 3 meses). Limites municipais: CAOP, Direção-Geral do Território.',
+      fSource: '<strong>Fontes:</strong> INE, Inquérito à avaliação bancária na habitação (valores medianos, médias móveis de 3 meses) e Estatísticas de preços da habitação ao nível local (valor mediano das vendas por m² e número de vendas nos últimos 12 meses, trimestrais). Limites municipais: CAOP, Direção-Geral do Território.',
+      vTitle: 'Avaliação bancária vs preço de venda em {nome}', vCat: 'Casas vendidas', cTotal: 'Todas', cNovos: 'Novas', cExist: 'Existentes',
+      vNote: 'Preço de venda: mediana das escrituras nos 12 meses até {m}. Avaliação: média do valor de avaliação nesses mesmos 12 meses (todas as habitações, com o mínimo de avaliações escolhido).',
+      vKpisAria: 'Comparação entre avaliação e venda', vkPreco: 'Preço de venda', vkYoy: 'Variação homóloga da venda', vkN: 'Casas vendidas', vkAval: 'Avaliação bancária', vkDif: 'Avaliação face à venda',
+      vPrecoSub: '12 meses até {m}', vYoySub: 'face a {m}', vNSub: 'nos 12 meses até {m}', vAvalSub: 'média de {k} meses com valor', vAvalNone: 'avaliações insuficientes', vDifPos: 'os bancos avaliam acima', vDifNeg: 'os bancos avaliam abaixo',
+      lgVenda: 'Preço de venda (12 meses)', lgAval: 'Avaliação bancária (média 12 meses)', tipVenda: 'Venda', tipAval12: 'Avaliação',
+      vStatN: 'municípios comparáveis', vStatMed: 'diferença mediana', thVenda: 'Venda €/m²', thAval12: 'Avaliação €/m²', thDif: 'Diferença', thVendas: 'Vendas',
+      vEmpty: 'Nenhum município tem avaliações suficientes. Baixa o mínimo de avaliações.',
+      vMethod: 'Diferença positiva: os bancos avaliam acima do preço a que se vende. A avaliação só conta meses com avaliações iguais ou acima do mínimo e precisa de pelo menos 6 meses com valor. A categoria (novas, existentes) só se aplica à venda.',
+      quarter: (q, y) => `${q}.º trim. ${y}`,
       fMethod: '<strong>Método:</strong> a variação homóloga compara o mês de referência com o mesmo mês do ano anterior. No mapa e no ranking só entram municípios com avaliações iguais ou acima do mínimo escolhido nos dois meses comparados. Os indicadores do topo usam o valor publicado, mesmo com amostra pequena, e assinalam quando fica abaixo do mínimo.',
       fBuilt: 'Versão web de um dashboard construído em Power BI. Projeto, dados e documentação: <a href="https://github.com/rodhipolito/habitacao-pt">github.com/rodhipolito/habitacao-pt</a>.',
       months: ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],
@@ -298,9 +352,9 @@ footer a { color: var(--accent); }
     },
     en: {
       title: 'Housing in Portugal',
-      eyebrow: 'INE (Statistics Portugal) · Bank housing appraisals',
+      eyebrow: 'INE (Statistics Portugal) · Bank appraisals and house prices',
       h1: 'What a square metre is worth <span>in Portugal</span>',
-      lede: 'Median value per m² assigned by banks when appraising homes for mortgage lending, by municipality, from January 2024 to September 2026. These are bank appraisals, not sale prices.',
+      lede: 'Median value per m² assigned by banks when appraising homes for mortgage lending, by municipality, from January 2024 to September 2026, compared at the end of the page with the prices homes actually sell for.',
       local: 'Location', tipo: 'Dwelling type', tTotal: 'All', tApartamentos: 'Apartments', tMoradias: 'Houses',
       mes: 'Reference month', min: 'Minimum appraisals', kpisAria: 'Figures for the selected location',
       kPreco: 'Median value', kYoy: 'Year-on-year change', kPer: 'Change since Jan 2024', kAval: 'Appraisals (3 months)', kCob: 'Municipalities with data',
@@ -314,7 +368,16 @@ footer a { color: var(--accent); }
       rankTitle: 'Municipal ranking', statN: 'municipalities', statMed: 'median', search: 'Search municipality', searchPh: 'e.g. Braga',
       rankNote: '{a} vs {b}, minimum of {n} appraisals', thMun: 'Municipality', thVar: 'Change', thAval: 'Appraisals',
       emptyQ: 'No municipality with that name in the ranking.', emptyMin: 'No municipality meets the minimum number of appraisals. Lower the minimum to see the ranking.',
-      fSource: '<strong>Source:</strong> INE (Statistics Portugal), Survey on bank appraisal of housing (median values, 3-month moving averages). Municipal boundaries: CAOP, Directorate-General for Territory.',
+      fSource: '<strong>Sources:</strong> INE (Statistics Portugal), Survey on bank appraisal of housing (median values, 3-month moving averages) and Local housing price statistics (median sale value per m² and number of sales over the last 12 months, quarterly). Municipal boundaries: CAOP, Directorate-General for Territory.',
+      vTitle: 'Bank appraisal vs sale price in {nome}', vCat: 'Homes sold', cTotal: 'All', cNovos: 'New', cExist: 'Existing',
+      vNote: 'Sale price: median of the deeds signed in the 12 months to {m}. Appraisal: average appraisal value over those same 12 months (all dwellings, with the chosen minimum number of appraisals).',
+      vKpisAria: 'Appraisal vs sale price', vkPreco: 'Sale price', vkYoy: 'Sale price, year-on-year', vkN: 'Homes sold', vkAval: 'Bank appraisal', vkDif: 'Appraisal vs sale price',
+      vPrecoSub: '12 months to {m}', vYoySub: 'vs {m}', vNSub: 'in the 12 months to {m}', vAvalSub: 'average of {k} months with data', vAvalNone: 'not enough appraisals', vDifPos: 'banks appraise above', vDifNeg: 'banks appraise below',
+      lgVenda: 'Sale price (12 months)', lgAval: 'Bank appraisal (12-month average)', tipVenda: 'Sale', tipAval12: 'Appraisal',
+      vStatN: 'comparable municipalities', vStatMed: 'median gap', thVenda: 'Sale €/m²', thAval12: 'Appraisal €/m²', thDif: 'Gap', thVendas: 'Sales',
+      vEmpty: 'No municipality has enough appraisals. Lower the minimum number of appraisals.',
+      vMethod: 'A positive gap means banks appraise above the price homes sell for. The appraisal only counts months at or above the minimum number of appraisals and needs at least 6 months with data. The category (new, existing) applies only to the sale price.',
+      quarter: (q, y) => `Q${q} ${y}`,
       fMethod: '<strong>Method:</strong> year-on-year change compares the reference month with the same month of the previous year. The map and ranking only include municipalities with at least the chosen minimum number of appraisals in both months. The headline figures use the published value even when the sample is small, and flag when it falls below the minimum.',
       fBuilt: 'Web version of a dashboard built in Power BI. Project, data and documentation: <a href="https://github.com/rodhipolito/habitacao-pt">github.com/rodhipolito/habitacao-pt</a>.',
       months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
@@ -330,7 +393,7 @@ footer a { color: var(--accent); }
   const munis = geos.filter(g => g.i > 0);
   const hashLang = location.hash.slice(1);
   const state = {
-    geo: 0, tipo: 'Total', mes: last, min: 150, q: '',
+    geo: 0, tipo: 'Total', mes: last, min: 150, q: '', cat: 'Total',
     lang: I18N[hashLang] ? hashLang : ((navigator.language || 'pt').toLowerCase().startsWith('pt') ? 'pt' : 'en'),
   };
 
@@ -596,7 +659,110 @@ footer a { color: var(--accent); }
     if (tr && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); setGeo(+tr.dataset.i); }
   });
 
+  // Avaliação vs venda (dados trimestrais, janela de 12 meses)
+  const VQ = DATA.vq, VL = VQ.length - 1;
+  const catK = { Total: 0, Novos: 2, Existentes: 3 };
+  const vP = (gi, qi) => (qi >= 0 ? DATA.v[gi][catK[state.cat]][qi] ?? null : null);
+  const vN = (gi, qi) => DATA.v[gi][1][qi] ?? null;
+  const qMes = qi => months.indexOf(VQ[qi]);
+  const relT = (gi, mi) => { const p = DATA.s.Total[gi][0][mi], n = DATA.s.Total[gi][1][mi]; return p != null && n != null && n >= state.min ? p : null; };
+  const aval12 = (gi, qi) => {
+    const mi = qMes(qi);
+    if (mi < 0) return null;
+    const v = [];
+    for (let k = Math.max(0, mi - 11); k <= mi; k++) { const p = relT(gi, k); if (p != null) v.push(p); }
+    return v.length >= 6 ? { p: d3.mean(v), k: v.length } : null;
+  };
+  const vDif = (gi, qi) => { const a = aval12(gi, qi), v = vP(gi, qi); return a && v != null ? a.p / v - 1 : null; };
+  const qMesCurto = qi => { const [y, m] = VQ[qi].split('-'); return L().monthsShort[+m - 1] + ' ' + y; };
+  const qLabel = qi => { const [y, m] = VQ[qi].split('-'); return L().quarter(+m / 3, y); };
+  document.querySelectorAll('#f-cat button').forEach(b => b.addEventListener('click', () => {
+    state.cat = b.dataset.cat;
+    document.querySelectorAll('#f-cat button').forEach(x => x.setAttribute('aria-checked', String(x === b)));
+    renderVendas();
+  }));
+
+  function renderVendas() {
+    const g = geos[state.geo];
+    document.getElementById('h-venda').textContent = t('vTitle', { nome: g.nome });
+    document.getElementById('v-note').textContent = t('vNote', { m: qMesCurto(VL) });
+    const p = vP(g.i, VL), p0 = vP(g.i, VL - 4), a = aval12(g.i, VL), d = vDif(g.i, VL);
+    document.getElementById('vk-preco').innerHTML = p == null ? '–' : `${fmtInt(p)}<small>€/m²</small>`;
+    document.getElementById('vk-preco-sub').textContent = t('vPrecoSub', { m: qMesCurto(VL) });
+    document.getElementById('vk-yoy').textContent = fmtPct(p != null && p0 != null ? p / p0 - 1 : null);
+    document.getElementById('vk-yoy-sub').textContent = t('vYoySub', { m: qLabel(VL - 4) });
+    document.getElementById('vk-n').textContent = fmtInt(vN(g.i, VL));
+    document.getElementById('vk-n-sub').textContent = t('vNSub', { m: qMesCurto(VL) });
+    document.getElementById('vk-aval').innerHTML = a ? `${fmtInt(a.p)}<small>€/m²</small>` : '–';
+    document.getElementById('vk-aval-sub').textContent = a ? t('vAvalSub', { k: a.k }) : t('vAvalNone');
+    document.getElementById('vk-dif').textContent = fmtPct(d);
+    document.getElementById('vk-dif-sub').textContent = d == null ? '' : t(d >= 0 ? 'vDifPos' : 'vDifNeg');
+
+    // Tabela de municípios comparáveis
+    const rows = munis.map(m => ({ g: m, v: vP(m.i, VL), a: aval12(m.i, VL), d: vDif(m.i, VL), n: vN(m.i, VL) }))
+      .filter(r => r.d != null).sort((x, y) => y.d - x.d);
+    document.getElementById('v-n').textContent = rows.length;
+    document.getElementById('v-med').textContent = fmtPct(rows.length ? d3.median(rows, r => r.d) : null);
+    const body = document.getElementById('v-body');
+    body.innerHTML = rows.length ? rows.map(r => `<tr data-i="${r.g.i}" tabindex="0" aria-selected="${r.g.i === state.geo}">
+      <td class="mun">${esc(r.g.nome)}</td><td class="r">${fmtInt(r.v)}</td><td class="r">${fmtInt(r.a.p)}</td>
+      <td class="r${r.d > 0 ? ' dpos' : ''}">${fmtPct(r.d)}</td><td class="r">${fmtInt(r.n)}</td></tr>`).join('')
+      : `<tr><td colspan="5" class="empty">${esc(t('vEmpty'))}</td></tr>`;
+    renderVChart();
+  }
+  document.getElementById('v-body').addEventListener('click', e => { const tr = e.target.closest('tr[data-i]'); if (tr) setGeo(+tr.dataset.i); });
+  document.getElementById('v-body').addEventListener('keydown', e => {
+    const tr = e.target.closest('tr[data-i]');
+    if (tr && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); setGeo(+tr.dataset.i); }
+  });
+
+  const vchartEl = document.getElementById('vchart');
+  const vTip = Object.assign(document.createElement('div'), { className: 'tip', hidden: true });
+  vchartEl.appendChild(vTip);
+  function renderVChart() {
+    const g = geos[state.geo];
+    document.getElementById('vchart-legend').innerHTML =
+      `<span><i></i>${esc(t('lgVenda'))}</span><span><i class="av"></i>${esc(t('lgAval'))}</span>`;
+    const W = Math.max(vchartEl.clientWidth, 280), H = 300, mg = { t: 16, r: 16, b: 28, l: 46 };
+    const sv = VQ.map((_, i) => ({ i, p: vP(g.i, i) }));
+    const sa = VQ.map((_, i) => { const a = aval12(g.i, i); return { i, p: a ? a.p : null }; });
+    const vals = sv.concat(sa).map(d => d.p).filter(v => v != null);
+    const svg = d3.select(vchartEl).selectAll('svg').data([0]).join('svg').attr('viewBox', `0 0 ${W} ${H}`);
+    svg.selectAll('*').remove();
+    if (!vals.length) {
+      svg.append('text').attr('x', W / 2).attr('y', H / 2).attr('text-anchor', 'middle').style('fill', css('--muted')).text(t('noData'));
+      return;
+    }
+    const x = d3.scaleLinear([0, VL], [mg.l, W - mg.r]);
+    const y = d3.scaleLinear([d3.min(vals) * 0.95, d3.max(vals) * 1.03], [H - mg.b, mg.t]).nice();
+    const grid = svg.append('g').attr('class', 'grid axis');
+    y.ticks(5).forEach(v => {
+      grid.append('line').attr('x1', mg.l).attr('x2', W - mg.r).attr('y1', y(v)).attr('y2', y(v));
+      grid.append('text').attr('x', mg.l - 8).attr('y', y(v)).attr('dy', '0.32em').attr('text-anchor', 'end').text(fmtInt(v));
+    });
+    const ax = svg.append('g').attr('class', 'axis');
+    VQ.forEach((q, i) => { if (q.endsWith('-03')) ax.append('text').attr('x', x(i)).attr('y', H - 8).attr('text-anchor', 'middle').text(q.slice(0, 4)); });
+    const line = d3.line().defined(d => d.p != null).x(d => x(d.i)).y(d => y(d.p));
+    svg.append('path').datum(sv).attr('d', line).style('fill', 'none').style('stroke', css('--accent')).style('stroke-width', 2.5).style('stroke-linejoin', 'round');
+    svg.append('path').datum(sa).attr('d', line).style('fill', 'none').style('stroke', css('--aval')).style('stroke-width', 2.5).style('stroke-linejoin', 'round');
+    const hover = svg.append('line').attr('y1', mg.t).attr('y2', H - mg.b).style('stroke', css('--line')).attr('visibility', 'hidden');
+    svg.append('rect').attr('x', mg.l).attr('y', mg.t).attr('width', W - mg.l - mg.r).attr('height', H - mg.t - mg.b).style('fill', 'transparent')
+      .on('pointermove', ev => {
+        const [mx] = d3.pointer(ev);
+        const i = Math.max(0, Math.min(VL, Math.round(x.invert(mx))));
+        hover.attr('x1', x(i)).attr('x2', x(i)).attr('visibility', 'visible');
+        vTip.innerHTML = `<strong>${esc(qLabel(i))}</strong><div class="row"><span>${esc(t('tipVenda'))}</span><span>${fmtInt(sv[i].p)} €/m²</span></div>`
+          + `<div class="row"><span>${esc(t('tipAval12'))}</span><span>${fmtInt(sa[i].p)} €/m²</span></div>`;
+        vTip.hidden = false;
+        const left = Math.min(x(i) / W * vchartEl.clientWidth + 12, vchartEl.clientWidth - vTip.offsetWidth - 4);
+        vTip.style.left = Math.max(0, left) + 'px';
+        vTip.style.top = '8px';
+      })
+      .on('pointerleave', () => { vTip.hidden = true; hover.attr('visibility', 'hidden'); });
+  }
+
   function render() {
+    renderVendas();
     computeRanking();
     renderKpis();
     renderChart();
@@ -605,6 +771,7 @@ footer a { color: var(--accent); }
   }
 
   new ResizeObserver(() => renderChart()).observe(chartEl);
+  new ResizeObserver(() => renderVChart()).observe(vchartEl);
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', render);
   new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   setLang(state.lang);
