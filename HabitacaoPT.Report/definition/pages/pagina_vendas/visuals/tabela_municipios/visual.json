@@ -1,0 +1,220 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "tabela_municipios",
+  "position": {
+    "x": 1160,
+    "y": 360,
+    "width": 720,
+    "height": 580,
+    "z": 14000,
+    "tabOrder": 14000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_geografia"
+                    }
+                  },
+                  "Property": "nome_geo"
+                }
+              },
+              "queryRef": "dim_geografia.nome_geo",
+              "nativeQueryRef": "nome_geo"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_geografia"
+                    }
+                  },
+                  "Property": "nome_nuts3"
+                }
+              },
+              "queryRef": "dim_geografia.nome_nuts3",
+              "nativeQueryRef": "nome_nuts3"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Preço venda €/m²"
+                }
+              },
+              "queryRef": "_Medidas.Preço venda €/m²",
+              "nativeQueryRef": "Preço venda €/m²"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Avaliação 12 meses €/m²"
+                }
+              },
+              "queryRef": "_Medidas.Avaliação 12 meses €/m²",
+              "nativeQueryRef": "Avaliação 12 meses €/m²"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Diferença avaliação vs venda"
+                }
+              },
+              "queryRef": "_Medidas.Diferença avaliação vs venda",
+              "nativeQueryRef": "Diferença avaliação vs venda"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Variação homóloga venda"
+                }
+              },
+              "queryRef": "_Medidas.Variação homóloga venda",
+              "nativeQueryRef": "Variação homóloga venda"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Vendas 12 meses"
+                }
+              },
+              "queryRef": "_Medidas.Vendas 12 meses",
+              "nativeQueryRef": "Vendas 12 meses"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_Medidas"
+                  }
+                },
+                "Property": "Diferença avaliação vs venda"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Municípios: venda, avaliação e diferença (último trimestre)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "f_nivel",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_geografia"
+              }
+            },
+            "Property": "nivel"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "d",
+              "Entity": "dim_geografia",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "d"
+                          }
+                        },
+                        "Property": "nivel"
+                      }
+                    }
+                  ],
+                  "Values": [
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'Municipio'"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "howCreated": "User"
+      }
+    ]
+  }
+}

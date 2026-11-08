@@ -200,6 +200,169 @@ table _Medidas
 		formatString: +0.0%;-0.0%;0.0%
 		lineageTag: 93069997-6aa9-435e-a85d-95e9352e0e55
 
+	measure '_Categoria venda' = SELECTEDVALUE(fact_vendas[categoria], "Total")
+		isHidden
+		displayFolder: Vendas
+		lineageTag: 88251966-3952-4bae-b517-5cba305af2b0
+
+	measure '_Geo venda' =
+			VAR nuts2 = SELECTEDVALUE(dim_geografia[nome_nuts2])
+			RETURN
+				SWITCH(
+					TRUE(),
+					HASONEVALUE(dim_geografia[cod_geo]), VALUES(dim_geografia[cod_geo]),
+					ISFILTERED(dim_geografia[nome_nuts2]) && NOT ISBLANK(nuts2),
+						CALCULATE(
+							MAX(dim_geografia[cod_geo]),
+							REMOVEFILTERS(dim_geografia),
+							dim_geografia[nome_geo] = nuts2,
+							dim_geografia[nivel] = "NUTS II"
+						),
+					"PT"
+				)
+		isHidden
+		displayFolder: Vendas
+		lineageTag: 12f397d9-ba83-4a92-bf5d-4145b04581f6
+
+	measure '_Trimestre venda' =
+			CALCULATE(
+				MAX(fact_vendas[trimestre]),
+				REMOVEFILTERS(dim_geografia),
+				REMOVEFILTERS(fact_vendas[categoria])
+			)
+		formatString: yyyy-mm-dd
+		isHidden
+		displayFolder: Vendas
+		lineageTag: b24af477-c0e5-47fe-8614-914394fe849d
+
+	measure 'Preço venda €/m²' =
+			VAR g = [_Geo venda]
+			VAR t = [_Trimestre venda]
+			VAR c = [_Categoria venda]
+			RETURN
+				CALCULATE(
+					MAX(fact_vendas[preco_m2_venda]),
+					REMOVEFILTERS(dim_geografia),
+					REMOVEFILTERS(fact_vendas),
+					dim_geografia[cod_geo] = g,
+					fact_vendas[trimestre] = t,
+					fact_vendas[categoria] = c
+				)
+		formatString: #,0
+		displayFolder: Vendas
+		lineageTag: 94b83158-eede-41c0-885c-8709f73891f1
+
+	measure 'Vendas 12 meses' =
+			VAR g = [_Geo venda]
+			VAR t = [_Trimestre venda]
+			RETURN
+				CALCULATE(
+					SUM(fact_vendas[n_vendas]),
+					REMOVEFILTERS(dim_geografia),
+					REMOVEFILTERS(fact_vendas),
+					dim_geografia[cod_geo] = g,
+					fact_vendas[trimestre] = t,
+					fact_vendas[categoria] = "Total"
+				)
+		formatString: #,0
+		displayFolder: Vendas
+		lineageTag: dbff9822-179e-4908-8da0-e75adebb6fb7
+
+	measure 'Preço venda há 12 meses €/m²' =
+			VAR g = [_Geo venda]
+			VAR t = EDATE([_Trimestre venda], -12)
+			VAR c = [_Categoria venda]
+			RETURN
+				CALCULATE(
+					MAX(fact_vendas[preco_m2_venda]),
+					REMOVEFILTERS(dim_geografia),
+					REMOVEFILTERS(fact_vendas),
+					dim_geografia[cod_geo] = g,
+					fact_vendas[trimestre] = t,
+					fact_vendas[categoria] = c
+				)
+		formatString: #,0
+		displayFolder: Vendas
+		lineageTag: 73a58a4d-ec6d-4f40-a459-93285cec2454
+
+	measure 'Variação homóloga venda' =
+			VAR atual = [Preço venda €/m²]
+			VAR anterior = [Preço venda há 12 meses €/m²]
+			RETURN
+				IF(NOT ISBLANK(atual) && NOT ISBLANK(anterior), DIVIDE(atual - anterior, anterior))
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Vendas
+		lineageTag: 4ad7d391-2fea-4586-947a-8fe9e372f98d
+
+	measure 'Avaliação 12 meses €/m²' =
+			// Média dos valores de avaliação fiáveis nos 12 meses que a venda cobre (mínimo 6 meses com valor)
+			VAR g = [_Geo venda]
+			VAR t = [_Trimestre venda]
+			VAR meses =
+				CALCULATETABLE(
+					FILTER(VALUES(dim_tempo[mes]), dim_tempo[mes] <= t && dim_tempo[mes] > EDATE(t, -12)),
+					REMOVEFILTERS(dim_tempo)
+				)
+			VAR valores =
+				CALCULATETABLE(
+					FILTER(
+						ADDCOLUMNS(meses, "@p", IF([_Avaliações base] >= [Mínimo de avaliações], [_Preço base])),
+						NOT ISBLANK([@p])
+					),
+					REMOVEFILTERS(dim_geografia),
+					dim_geografia[cod_geo] = g
+				)
+			RETURN
+				IF(COUNTROWS(valores) >= 6, AVERAGEX(valores, [@p]))
+		formatString: #,0
+		displayFolder: Vendas
+		lineageTag: ee39c5da-e7e3-486f-9596-bd26721dcc34
+
+	measure 'Diferença avaliação vs venda' =
+			VAR a = [Avaliação 12 meses €/m²]
+			VAR v = [Preço venda €/m²]
+			RETURN
+				IF(NOT ISBLANK(a) && NOT ISBLANK(v), DIVIDE(a - v, v))
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Vendas
+		lineageTag: 0586451e-40ed-45c5-b513-8131815f52cc
+
+	measure 'Diferença mediana (municípios)' =
+			MEDIANX(
+				FILTER(
+					CALCULATETABLE(VALUES(dim_geografia[cod_geo]), dim_geografia[nivel] = "Municipio"),
+					NOT ISBLANK([Diferença avaliação vs venda])
+				),
+				[Diferença avaliação vs venda]
+			)
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Vendas
+		lineageTag: 597ccbca-7b86-4408-a266-4fbfdbe5ff55
+
+	measure 'Municípios comparáveis' =
+			COUNTROWS(
+				FILTER(
+					CALCULATETABLE(VALUES(dim_geografia[cod_geo]), dim_geografia[nivel] = "Municipio"),
+					NOT ISBLANK([Diferença avaliação vs venda])
+				)
+			)
+		formatString: 0
+		displayFolder: Vendas
+		lineageTag: 38776a4a-f3b3-41d0-9f5b-722b2656faf0
+
+	measure 'Período vendas' =
+			VAR t = [_Trimestre venda]
+			RETURN
+				"Vendas nos 12 meses até " & FORMAT(t, "mm/yyyy") & " (" & [_Categoria venda] & ")"
+		displayFolder: Vendas
+		lineageTag: 4f72656f-7fe5-4984-b2e8-f6a3bb34d3ea
+
+	measure 'Título vendas' =
+			"Venda vs avaliação (€/m²): "
+				& IF([_Geo venda] = "PT", "Portugal", LOOKUPVALUE(dim_geografia[nome_geo], dim_geografia[cod_geo], [_Geo venda]))
+		displayFolder: Vendas
+		lineageTag: 80f9cd9f-58aa-4a88-8a20-a602b01dffc9
+
 	column Coluna
 		dataType: string
 		isHidden

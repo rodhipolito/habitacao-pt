@@ -1,0 +1,36 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "subtitulo",
+  "position": {
+    "x": 40,
+    "y": 80,
+    "width": 1700,
+    "height": 40,
+    "z": 2000,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Preço de venda: mediana das escrituras dos últimos 12 meses (INE). Avaliação: média do valor de avaliação bancária nesses mesmos 12 meses. Diferença positiva = os bancos avaliam acima do preço a que se vende.",
+                    "textStyle": {
+                      "fontSize": "11pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

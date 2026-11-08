@@ -15,3 +15,7 @@ relationship dd399c3b-3095-47fe-a68d-d9525eb4855d
 	fromColumn: dim_tempo.mes
 	toColumn: LocalDateTable_3d961a3b-251e-4a6d-a359-29f4583ba5e1.Date
 
+relationship vendas_para_geografia
+	fromColumn: fact_vendas.cod_geo
+	toColumn: dim_geografia.cod_geo
+

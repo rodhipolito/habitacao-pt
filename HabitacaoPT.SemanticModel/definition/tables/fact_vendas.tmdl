@@ -1,0 +1,55 @@
+table fact_vendas
+	lineageTag: f51f612c-ef9b-4915-8c08-5b4acf36ba49
+
+	column cod_geo
+		dataType: string
+		lineageTag: a91c20ef-5b49-4d30-a12f-18b172ef596e
+		summarizeBy: none
+		sourceColumn: cod_geo
+
+	column trimestre
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: d086ee2d-3788-4ade-a446-8c2d3bb6579d
+		summarizeBy: none
+		sourceColumn: trimestre
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column trimestre_label
+		dataType: string
+		lineageTag: b6e9d7c0-f3c5-4b3e-9ea3-5bad950b460e
+		summarizeBy: none
+		sourceColumn: trimestre_label
+		sortByColumn: trimestre
+
+	column categoria
+		dataType: string
+		lineageTag: 1a00f4c8-7078-459b-a0c3-a25272972080
+		summarizeBy: none
+		sourceColumn: categoria
+
+	column preco_m2_venda
+		dataType: int64
+		formatString: #,0
+		lineageTag: e69c07ac-46de-4c4e-a4d0-69c162004e36
+		summarizeBy: none
+		sourceColumn: preco_m2_venda
+
+	column n_vendas
+		dataType: int64
+		formatString: #,0
+		lineageTag: db2c4034-36c9-41e1-851d-546fef570ded
+		summarizeBy: none
+		sourceColumn: n_vendas
+
+	partition fact_vendas = m
+		mode: import
+		source =
+				let
+					Fonte = Csv.Document(File.Contents(Pasta & "fact_vendas.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+					Cabecalho = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+					Tipos = Table.TransformColumnTypes(Cabecalho, {{"cod_geo", type text},{"trimestre", type date},{"trimestre_label", type text},{"categoria", type text},{"preco_m2_venda", Int64.Type},{"n_vendas", Int64.Type}}, "en-US")
+				in
+					Tipos
+

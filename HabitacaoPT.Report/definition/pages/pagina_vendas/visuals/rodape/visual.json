@@ -1,0 +1,36 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "rodape",
+  "position": {
+    "x": 40,
+    "y": 800,
+    "width": 1100,
+    "height": 140,
+    "z": 15000,
+    "tabOrder": 15000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Fontes: INE, Estatísticas de preços da habitação ao nível local (indicadores 0012234 e 0014363, trimestrais, janela de 12 meses) e Avaliação bancária na habitação. A categoria (Total, Novos, Existentes) só se aplica à venda; a avaliação usa sempre o total. O filtro de NUTS II muda os cartões e o gráfico para essa região. A avaliação só conta meses com avaliações acima do mínimo e precisa de pelo menos 6 meses com valor.",
+                    "textStyle": {
+                      "fontSize": "11pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

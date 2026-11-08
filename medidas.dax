@@ -157,3 +157,132 @@ MEDIANX(
 
 // Coluna calculada em dim_geografia (categoria de dados: Local)
 local_mapa = dim_geografia[nome_geo] & ", " & dim_geografia[nome_nuts2] & ", Portugal"
+
+
+// Página "Avaliação vs venda" (tabela fact_vendas, INE: preços da habitação ao nível local)
+
+_Categoria venda =
+SELECTEDVALUE(fact_vendas[categoria], "Total")
+
+_Geo venda =
+VAR nuts2 = SELECTEDVALUE(dim_geografia[nome_nuts2])
+RETURN
+	SWITCH(
+		TRUE(),
+		HASONEVALUE(dim_geografia[cod_geo]), VALUES(dim_geografia[cod_geo]),
+		ISFILTERED(dim_geografia[nome_nuts2]) && NOT ISBLANK(nuts2),
+			CALCULATE(
+				MAX(dim_geografia[cod_geo]),
+				REMOVEFILTERS(dim_geografia),
+				dim_geografia[nome_geo] = nuts2,
+				dim_geografia[nivel] = "NUTS II"
+			),
+		"PT"
+	)
+
+_Trimestre venda =
+CALCULATE(
+	MAX(fact_vendas[trimestre]),
+	REMOVEFILTERS(dim_geografia),
+	REMOVEFILTERS(fact_vendas[categoria])
+)
+
+Preço venda €/m² =
+VAR g = [_Geo venda]
+VAR t = [_Trimestre venda]
+VAR c = [_Categoria venda]
+RETURN
+	CALCULATE(
+		MAX(fact_vendas[preco_m2_venda]),
+		REMOVEFILTERS(dim_geografia),
+		REMOVEFILTERS(fact_vendas),
+		dim_geografia[cod_geo] = g,
+		fact_vendas[trimestre] = t,
+		fact_vendas[categoria] = c
+	)
+
+Vendas 12 meses =
+VAR g = [_Geo venda]
+VAR t = [_Trimestre venda]
+RETURN
+	CALCULATE(
+		SUM(fact_vendas[n_vendas]),
+		REMOVEFILTERS(dim_geografia),
+		REMOVEFILTERS(fact_vendas),
+		dim_geografia[cod_geo] = g,
+		fact_vendas[trimestre] = t,
+		fact_vendas[categoria] = "Total"
+	)
+
+Preço venda há 12 meses €/m² =
+VAR g = [_Geo venda]
+VAR t = EDATE([_Trimestre venda], -12)
+VAR c = [_Categoria venda]
+RETURN
+	CALCULATE(
+		MAX(fact_vendas[preco_m2_venda]),
+		REMOVEFILTERS(dim_geografia),
+		REMOVEFILTERS(fact_vendas),
+		dim_geografia[cod_geo] = g,
+		fact_vendas[trimestre] = t,
+		fact_vendas[categoria] = c
+	)
+
+Variação homóloga venda =
+VAR atual = [Preço venda €/m²]
+VAR anterior = [Preço venda há 12 meses €/m²]
+RETURN
+	IF(NOT ISBLANK(atual) && NOT ISBLANK(anterior), DIVIDE(atual - anterior, anterior))
+
+Avaliação 12 meses €/m² =
+// Média dos valores de avaliação fiáveis nos 12 meses que a venda cobre (mínimo 6 meses com valor)
+VAR g = [_Geo venda]
+VAR t = [_Trimestre venda]
+VAR meses =
+	CALCULATETABLE(
+		FILTER(VALUES(dim_tempo[mes]), dim_tempo[mes] <= t && dim_tempo[mes] > EDATE(t, -12)),
+		REMOVEFILTERS(dim_tempo)
+	)
+VAR valores =
+	CALCULATETABLE(
+		FILTER(
+			ADDCOLUMNS(meses, "@p", IF([_Avaliações base] >= [Mínimo de avaliações], [_Preço base])),
+			NOT ISBLANK([@p])
+		),
+		REMOVEFILTERS(dim_geografia),
+		dim_geografia[cod_geo] = g
+	)
+RETURN
+	IF(COUNTROWS(valores) >= 6, AVERAGEX(valores, [@p]))
+
+Diferença avaliação vs venda =
+VAR a = [Avaliação 12 meses €/m²]
+VAR v = [Preço venda €/m²]
+RETURN
+	IF(NOT ISBLANK(a) && NOT ISBLANK(v), DIVIDE(a - v, v))
+
+Diferença mediana (municípios) =
+MEDIANX(
+	FILTER(
+		CALCULATETABLE(VALUES(dim_geografia[cod_geo]), dim_geografia[nivel] = "Municipio"),
+		NOT ISBLANK([Diferença avaliação vs venda])
+	),
+	[Diferença avaliação vs venda]
+)
+
+Municípios comparáveis =
+COUNTROWS(
+	FILTER(
+		CALCULATETABLE(VALUES(dim_geografia[cod_geo]), dim_geografia[nivel] = "Municipio"),
+		NOT ISBLANK([Diferença avaliação vs venda])
+	)
+)
+
+Período vendas =
+VAR t = [_Trimestre venda]
+RETURN
+	"Vendas nos 12 meses até " & FORMAT(t, "mm/yyyy") & " (" & [_Categoria venda] & ")"
+
+Título vendas =
+"Venda vs avaliação (€/m²): "
+	& IF([_Geo venda] = "PT", "Portugal", LOOKUPVALUE(dim_geografia[nome_geo], dim_geografia[cod_geo], [_Geo venda]))

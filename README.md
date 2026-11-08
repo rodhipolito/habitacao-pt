@@ -15,12 +15,14 @@ A Power BI report on the median value per m² that banks assign when appraising 
 - How much is a square metre of housing worth in each municipality, according to bank appraisals?
 - How did it change in the last 12 months, and since January 2024?
 - Which municipalities rose the most, once small samples are filtered out?
+- How far are bank appraisals from the prices homes actually sell for, in each municipality?
 
 ## Data sources
 
 | Data | Source |
 | --- | --- |
 | Median bank appraisal value (€/m²) and number of appraisals, monthly, by municipality and dwelling type | INE (Statistics Portugal), *Inquérito à Avaliação Bancária na Habitação*. Published as 3-month moving values. Extracted on 6 November 2026. |
+| Median sale price (€/m²) and number of sales over the last 12 months, quarterly, by municipality and category (new, existing) | INE, *Estatísticas de preços da habitação ao nível local* (Metodologia 2022), indicators 0012234 and 0014363. Downloaded from the INE API by [etl/fact_vendas.py](etl/fact_vendas.py), Q4 2019 to Q2 2026. |
 | Municipal boundaries for the map | CAOP, Direção-Geral do Território. Mainland from CAOP 2025, Madeira and Azores from the archipelago layers. |
 
 These are bank appraisals, not sale prices. More than half of the municipality-month cells have no published value, which is why the report uses a minimum number of appraisals before showing a price.
@@ -33,8 +35,9 @@ The data preparation (encoding fixes, a three-line header, reshaping to a star s
 | --- | --- |
 | `HabitacaoPT.pbip` | Opens the project in Power BI Desktop. |
 | `HabitacaoPT.SemanticModel/` | The data model in TMDL: tables, relationships, measures, Power Query. |
-| `HabitacaoPT.Report/` | The report in PBIR: two pages (overview and municipal ranking), including the custom shape map. |
-| `dados/` | The four CSV tables the model loads (star schema). |
+| `HabitacaoPT.Report/` | The report in PBIR: three pages (overview, municipal ranking, and appraisal vs. sale price), including the custom shape map. |
+| `dados/` | The five CSV tables the model loads (star schema). |
+| `etl/fact_vendas.py` | Downloads the INE sale-price data and writes `dados/fact_vendas.csv`. |
 | `mapas/municipios_pt.json` | TopoJSON of the 308 municipalities, keyed by the model's municipality names. |
 | `medidas.dax` | All DAX measures in one readable file. |
 | `web/` | Source of the web version: `template.html`, `build.js` and the generated `index.html`. |
@@ -47,12 +50,20 @@ erDiagram
     dim_geografia ||--o{ fact_avaliacao : cod_geo
     dim_tempo ||--o{ fact_avaliacao : mes
     dim_tipo ||--o{ fact_avaliacao : tipo_construcao
+    dim_geografia ||--o{ fact_vendas : cod_geo
     fact_avaliacao {
         string cod_geo
         date mes
         string tipo_construcao
         int preco_m2
         int n_avaliacoes
+    }
+    fact_vendas {
+        string cod_geo
+        date trimestre
+        string categoria
+        int preco_m2_venda
+        int n_vendas
     }
     dim_geografia {
         string cod_geo
@@ -72,7 +83,7 @@ erDiagram
     }
 ```
 
-`param_min_avaliacoes` is a disconnected what-if table (0 to 400 appraisals) that drives the minimum sample. `_Medidas` holds the measures.
+`param_min_avaliacoes` is a disconnected what-if table (0 to 400 appraisals) that drives the minimum sample. `_Medidas` holds the measures. `fact_vendas` is quarterly, so it links only to `dim_geografia`; its measures pick the latest quarter themselves.
 
 ## Key measures
 
@@ -84,6 +95,9 @@ erDiagram
 | `Ranking variação` | Rank of each municipality by year-on-year change (`RANKX` over `ALLSELECTED`). |
 | `Variação homóloga mediana` | Median year-on-year change across ranked municipalities. |
 | `Cobertura de municípios` | Share of municipalities with a published value in the latest month. |
+| `Preço venda €/m²` | Median sale price over the last 12 months (latest quarter), for the selected municipality, NUTS II region or Portugal. |
+| `Avaliação 12 meses €/m²` | Average reliable appraisal value over the same 12 months as the sale price. |
+| `Diferença avaliação vs venda` | How far the appraisal is above (+) or below (−) the sale price. |
 
 The full DAX is in [medidas.dax](medidas.dax).
 
@@ -120,6 +134,7 @@ Relatório Power BI sobre o valor mediano por m² que os bancos atribuem nas ava
 ### Fontes
 
 - **INE**, Inquérito à Avaliação Bancária na Habitação: valores medianos (€/m²) e número de avaliações, mensais, por município e tipo de construção, em médias móveis de 3 meses. Dados extraídos a 6 de novembro de 2026.
+- **INE**, Estatísticas de preços da habitação ao nível local: valor mediano das vendas por m² e número de vendas nos últimos 12 meses, trimestrais, por município (indicadores 0012234 e 0014363), descarregados com `etl/fact_vendas.py`.
 - **CAOP, Direção-Geral do Território**: limites municipais para o mapa.
 
 São avaliações bancárias, não preços de venda. Mais de metade das combinações município-mês não tem valor publicado, por isso o relatório só mostra o preço quando o número de avaliações atinge o mínimo escolhido.
