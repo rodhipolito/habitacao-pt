@@ -160,6 +160,7 @@ td.reg { color: var(--muted); }
 
 footer { border-top: 1px solid var(--line); padding-block: 20px 40px; font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
 footer p { margin: 0; max-width: 90ch; }
+footer a { color: var(--accent); }
 
 @media (max-width: 1000px) {
   .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -266,7 +267,7 @@ footer p { margin: 0; max-width: 90ch; }
 <footer class="wrap">
   <p data-i18n-html="fSource"></p>
   <p data-i18n-html="fMethod"></p>
-  <p data-i18n="fBuilt"></p>
+  <p data-i18n-html="fBuilt"></p>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
@@ -296,7 +297,7 @@ const TOPO = {"type":"Topology","arcs":[[[79568,71369],[-86,29]],[[79482,71398],
       emptyQ: 'Nenhum município com esse nome no ranking.', emptyMin: 'Nenhum município cumpre o mínimo de avaliações. Baixa o mínimo para ver o ranking.',
       fSource: '<strong>Fonte:</strong> INE, Inquérito à avaliação bancária na habitação (valores medianos, médias móveis de 3 meses). Limites municipais: CAOP, Direção-Geral do Território.',
       fMethod: '<strong>Método:</strong> a variação homóloga compara o mês de referência com o mesmo mês do ano anterior. No mapa e no ranking só entram municípios com avaliações iguais ou acima do mínimo escolhido nos dois meses comparados. Os indicadores do topo usam o valor publicado, mesmo com amostra pequena, e assinalam quando fica abaixo do mínimo.',
-      fBuilt: 'Versão web de um dashboard construído em Power BI.',
+      fBuilt: 'Versão web de um dashboard construído em Power BI. Projeto, dados e documentação: <a href="https://github.com/rodhipolito/habitacao-pt">github.com/rodhipolito/habitacao-pt</a>.',
       months: ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],
       monthsShort: ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'],
       monthYear: (m, y) => `${m} de ${y}`, locale: 'pt-PT', dec: ',',
@@ -321,7 +322,7 @@ const TOPO = {"type":"Topology","arcs":[[[79568,71369],[-86,29]],[[79482,71398],
       emptyQ: 'No municipality with that name in the ranking.', emptyMin: 'No municipality meets the minimum number of appraisals. Lower the minimum to see the ranking.',
       fSource: '<strong>Source:</strong> INE (Statistics Portugal), Survey on bank appraisal of housing (median values, 3-month moving averages). Municipal boundaries: CAOP, Directorate-General for Territory.',
       fMethod: '<strong>Method:</strong> year-on-year change compares the reference month with the same month of the previous year. The map and ranking only include municipalities with at least the chosen minimum number of appraisals in both months. The headline figures use the published value even when the sample is small, and flag when it falls below the minimum.',
-      fBuilt: 'Web version of a dashboard built in Power BI.',
+      fBuilt: 'Web version of a dashboard built in Power BI. Project, data and documentation: <a href="https://github.com/rodhipolito/habitacao-pt">github.com/rodhipolito/habitacao-pt</a>.',
       months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
       monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       monthYear: (m, y) => `${m} ${y}`, locale: 'en-GB', dec: '.',
