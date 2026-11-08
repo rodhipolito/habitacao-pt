@@ -28,7 +28,8 @@
               },
               "queryRef": "param_min_avaliacoes.Valor",
               "nativeQueryRef": "Valor",
-              "active": true
+              "active": true,
+              "displayName": "Mínimo de avaliações (3 meses)"
             }
           ]
         }

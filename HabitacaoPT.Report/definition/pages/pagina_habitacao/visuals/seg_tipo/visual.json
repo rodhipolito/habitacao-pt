@@ -28,7 +28,8 @@
               },
               "queryRef": "dim_tipo.tipo_construcao",
               "nativeQueryRef": "tipo_construcao",
-              "active": true
+              "active": true,
+              "displayName": "Tipo de habitação"
             }
           ]
         }

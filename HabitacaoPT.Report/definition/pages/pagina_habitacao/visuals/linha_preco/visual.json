@@ -28,7 +28,8 @@
               },
               "queryRef": "dim_tempo.ano_mes",
               "nativeQueryRef": "ano_mes",
-              "active": true
+              "active": true,
+              "displayName": "Mês"
             }
           ]
         },
@@ -46,7 +47,8 @@
                 }
               },
               "queryRef": "_Medidas.Preço €/m²",
-              "nativeQueryRef": "Preço €/m²"
+              "nativeQueryRef": "Preço €/m²",
+              "displayName": "Valor mediano"
             },
             {
               "field": {
@@ -60,7 +62,8 @@
                 }
               },
               "queryRef": "_Medidas.Média móvel 3 meses €/m²",
-              "nativeQueryRef": "Média móvel 3 meses €/m²"
+              "nativeQueryRef": "Média móvel 3 meses €/m²",
+              "displayName": "Média de 3 meses"
             }
           ]
         }
@@ -91,6 +94,19 @@
             }
           }
         }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
       ]
     },
     "drillFilterOtherVisuals": true,
@@ -102,6 +118,19 @@
               "expr": {
                 "Literal": {
                   "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryAxis": [
+        {
+          "properties": {
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

@@ -28,7 +28,8 @@
               },
               "queryRef": "dim_tempo.ano_mes",
               "nativeQueryRef": "ano_mes",
-              "active": true
+              "active": true,
+              "displayName": "Mês"
             }
           ]
         },
@@ -46,7 +47,8 @@
                 }
               },
               "queryRef": "_Medidas.Avaliações (3 meses)",
-              "nativeQueryRef": "Avaliações (3 meses)"
+              "nativeQueryRef": "Avaliações (3 meses)",
+              "displayName": "Avaliações"
             }
           ]
         }
@@ -72,6 +74,19 @@
             }
           }
         }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
       ]
     },
     "drillFilterOtherVisuals": true,
@@ -83,6 +98,19 @@
               "expr": {
                 "Literal": {
                   "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryAxis": [
+        {
+          "properties": {
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

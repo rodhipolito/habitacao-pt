@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "dim_geografia.nome_geo",
-              "nativeQueryRef": "nome_geo"
+              "nativeQueryRef": "nome_geo",
+              "displayName": "Município"
             },
             {
               "field": {
@@ -41,7 +42,8 @@
                 }
               },
               "queryRef": "_Medidas.Preço fiável último mês €/m²",
-              "nativeQueryRef": "Preço fiável último mês €/m²"
+              "nativeQueryRef": "Preço fiável último mês €/m²",
+              "displayName": "Preço €/m²"
             },
             {
               "field": {
@@ -55,7 +57,8 @@
                 }
               },
               "queryRef": "_Medidas.Avaliações último mês",
-              "nativeQueryRef": "Avaliações último mês"
+              "nativeQueryRef": "Avaliações último mês",
+              "displayName": "Avaliações"
             },
             {
               "field": {
@@ -69,7 +72,8 @@
                 }
               },
               "queryRef": "_Medidas.Variação homóloga último mês",
-              "nativeQueryRef": "Variação homóloga último mês"
+              "nativeQueryRef": "Variação homóloga último mês",
+              "displayName": "Var. homóloga"
             }
           ]
         }
@@ -115,7 +119,22 @@
         }
       ]
     },
-    "drillFilterOtherVisuals": true
+    "drillFilterOtherVisuals": true,
+    "objects": {
+      "total": [
+        {
+          "properties": {
+            "totals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
   },
   "filterConfig": {
     "filters": [

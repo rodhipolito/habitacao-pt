@@ -28,7 +28,8 @@
               },
               "queryRef": "dim_geografia.nome_geo",
               "nativeQueryRef": "nome_geo",
-              "active": true
+              "active": true,
+              "displayName": "Local"
             }
           ]
         }
