@@ -49,12 +49,6 @@ table dim_geografia
 		summarizeBy: none
 		sourceColumn: nome_nuts2
 
-	column local_mapa = dim_geografia[nome_geo] & ", " & dim_geografia[nome_nuts2] & ", Portugal"
-		dataType: string
-		lineageTag: 63ed72b4-19ad-48cd-8e19-fdf102f35237
-		dataCategory: Place
-		summarizeBy: none
-
 	partition dim_geografia = m
 		mode: import
 		source =

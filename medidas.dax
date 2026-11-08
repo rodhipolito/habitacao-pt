@@ -155,8 +155,6 @@ MEDIANX(
 	[Variação homóloga fiável]
 )
 
-// Coluna calculada em dim_geografia (categoria de dados: Local)
-local_mapa = dim_geografia[nome_geo] & ", " & dim_geografia[nome_nuts2] & ", Portugal"
 
 
 // Página "Avaliação vs venda" (tabela fact_vendas, INE: preços da habitação ao nível local)
