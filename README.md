@@ -23,13 +23,13 @@ A Power BI report on the median value per m² that banks assign when appraising 
 
 | Data | Source |
 | --- | --- |
-| Median bank appraisal value (€/m²) and number of appraisals, monthly, by municipality and dwelling type | INE (Statistics Portugal), *Inquérito à Avaliação Bancária na Habitação*. Published as 3-month moving values. Extracted on 6 November 2026. |
+| Median bank appraisal value (€/m²) and number of appraisals, monthly, by municipality and dwelling type | INE (Statistics Portugal), *Inquérito à Avaliação Bancária na Habitação*. Indicators 0012248 and 0012247, published as 3-month moving values. Downloaded from the INE API by [etl/fact_avaliacao.py](etl/fact_avaliacao.py). Extracted on 6 November 2026. |
 | Median sale price (€/m²) and number of sales over the last 12 months, quarterly, by municipality and category (new, existing) | INE, *Estatísticas de preços da habitação ao nível local* (Metodologia 2022), indicators 0012234 and 0014363. Downloaded from the INE API by [etl/fact_vendas.py](etl/fact_vendas.py), Q4 2019 to Q2 2026. |
 | Municipal boundaries for the map | CAOP, Direção-Geral do Território. Mainland from CAOP 2025, Madeira and Azores from the archipelago layers. |
 
 These are bank appraisals, not sale prices. More than half of the municipality-month cells have no published value, which is why the report uses a minimum number of appraisals before showing a price.
 
-The data preparation (encoding fixes, a three-line header, reshaping to a star schema) is documented step by step in [docs/etl-habitacao.html](docs/etl-habitacao.html). Download the file and open it in a browser.
+Both fact tables can be rebuilt from the INE API with the scripts in `etl/` (see [Refreshing the data](#refreshing-the-data)). The original preparation from INE's CSV export (encoding fixes, a three-line header, reshaping to a star schema) is documented step by step in the [ETL write-up](https://habitacao-pt.vercel.app/etl.html) (in Portuguese; source in [docs/etl-habitacao.html](docs/etl-habitacao.html)).
 
 ## Repository structure
 
@@ -39,6 +39,7 @@ The data preparation (encoding fixes, a three-line header, reshaping to a star s
 | `HabitacaoPT.SemanticModel/` | The data model in TMDL: tables, relationships, measures, Power Query. |
 | `HabitacaoPT.Report/` | The report in PBIR: three pages (overview, municipal ranking, and appraisal vs. sale price), including the custom shape map. |
 | `dados/` | The five CSV tables the model loads (star schema). |
+| `etl/fact_avaliacao.py` | Downloads the INE appraisal data and writes `dados/fact_avaliacao.csv`, `dim_tempo.csv` and `dim_geografia.csv`. |
 | `etl/fact_vendas.py` | Downloads the INE sale-price data and writes `dados/fact_vendas.csv`. |
 | `mapas/municipios_pt.json` | TopoJSON of the 308 municipalities, keyed by the model's municipality names. |
 | `medidas.dax` | All DAX measures in one readable file. |
@@ -111,6 +112,19 @@ The full DAX is in [medidas.dax](medidas.dax).
 4. Point the model to your copy of the data: **Transform data > Manage parameters > Pasta**, set it to the full path of the `dados` folder, ending with `\` (for example `C:\Users\you\habitacao-pt\dados\`).
 5. Select **Refresh**.
 
+The model uses its own date table (`dim_tempo`, marked as a date table) with Auto date/time turned off.
+
+## Refreshing the data
+
+Both scripts use only the Python standard library and call the public INE API:
+
+```bash
+python etl/fact_avaliacao.py   # bank appraisals, from January 2024 (pass another start month, e.g. 2023-01)
+python etl/fact_vendas.py      # sale prices and number of sales
+```
+
+Then select **Refresh** in Power BI Desktop and run `node web/build.js` for the web version. `dados/dim_tipo.csv` is a fixed three-row table. The INE API occasionally returns a temporary database error; the appraisal script retries a few times before giving up.
+
 ## Web version
 
 The web version recomputes the same measures in JavaScript from the same CSVs, with D3.js for the charts and map. It includes the appraisal vs. sale price comparison. To regenerate it after changing the data:
@@ -119,7 +133,7 @@ The web version recomputes the same measures in JavaScript from the same CSVs, w
 node web/build.js
 ```
 
-It writes `web/index.html`, a single self-contained page. The build script also prints a check against the Power BI figures (national value, number of ranked municipalities, median and top three, and the national sale price, appraisal gap and number of comparable municipalities). To refresh the sale prices first, run `python etl/fact_vendas.py`.
+It writes `web/index.html`, a single self-contained page. The build script also prints a check against the Power BI figures (national value, number of ranked municipalities, median and top three, and the national sale price, appraisal gap and number of comparable municipalities). If a `web/habitacao-pt/` publishing folder exists, it also copies the page and the ETL write-up there.
 
 ## License
 
@@ -135,13 +149,13 @@ Relatório Power BI sobre o valor mediano por m² que os bancos atribuem nas ava
 
 ### Fontes
 
-- **INE**, Inquérito à Avaliação Bancária na Habitação: valores medianos (€/m²) e número de avaliações, mensais, por município e tipo de construção, em médias móveis de 3 meses. Dados extraídos a 6 de novembro de 2026.
+- **INE**, Inquérito à Avaliação Bancária na Habitação: valores medianos (€/m²) e número de avaliações, mensais, por município e tipo de construção, em médias móveis de 3 meses (indicadores 0012248 e 0012247), descarregados com `etl/fact_avaliacao.py`. Dados extraídos a 6 de novembro de 2026.
 - **INE**, Estatísticas de preços da habitação ao nível local: valor mediano das vendas por m² e número de vendas nos últimos 12 meses, trimestrais, por município (indicadores 0012234 e 0014363), descarregados com `etl/fact_vendas.py`.
 - **CAOP, Direção-Geral do Território**: limites municipais para o mapa.
 
 São avaliações bancárias, não preços de venda. Mais de metade das combinações município-mês não tem valor publicado, por isso o relatório só mostra o preço quando o número de avaliações atinge o mínimo escolhido.
 
-O tratamento dos dados está explicado passo a passo em [docs/etl-habitacao.html](docs/etl-habitacao.html).
+Para atualizar os dados: `python etl/fact_avaliacao.py`, `python etl/fact_vendas.py` e depois **Atualizar** no Power BI. O tratamento original dos dados está explicado passo a passo no [documento do ETL](https://habitacao-pt.vercel.app/etl.html).
 
 ### Como abrir o projeto
 

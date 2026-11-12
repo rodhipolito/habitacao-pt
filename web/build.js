@@ -90,3 +90,11 @@ const head = '<!doctype html>\n<html lang="pt-PT">\n<head>\n<meta charset="utf-8
 fs.writeFileSync(path.join(__dirname, 'index.html'), head + body.replace('<!--__BODY__-->', '</head>\n<body>') + '\n</body>\n</html>\n');
 if (process.argv[2]) fs.writeFileSync(process.argv[2], body.replace('<!--__BODY__-->', ''));
 console.log('index.html', (fs.statSync(path.join(__dirname, 'index.html')).size / 1024).toFixed(0), 'KB');
+
+// Pasta de publicação do Vercel (não vai para o Git): página principal e documento do ETL.
+const pub = path.join(__dirname, 'habitacao-pt');
+if (fs.existsSync(pub)) {
+  fs.copyFileSync(path.join(__dirname, 'index.html'), path.join(pub, 'index.html'));
+  fs.copyFileSync(path.join(root, 'docs', 'etl-habitacao.html'), path.join(pub, 'etl.html'));
+  console.log('copiado para web/habitacao-pt (index.html, etl.html)');
+}

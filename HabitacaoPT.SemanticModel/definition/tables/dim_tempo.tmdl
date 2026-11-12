@@ -1,17 +1,14 @@
 table dim_tempo
 	lineageTag: 6253593f-d7b6-47e0-a92f-79968b127049
+	dataCategory: Time
 
 	column mes
 		dataType: dateTime
 		formatString: mmm yyyy
 		lineageTag: fba3d6bd-20fd-43c8-a5cd-25aaaef0a932
 		summarizeBy: none
+		isKey
 		sourceColumn: mes
-
-		variation Variation
-			isDefault
-			relationship: dd399c3b-3095-47fe-a68d-d9525eb4855d
-			defaultHierarchy: LocalDateTable_3d961a3b-251e-4a6d-a359-29f4583ba5e1.'Date Hierarchy'
 
 		annotation UnderlyingDateTimeDataType = Date
 
