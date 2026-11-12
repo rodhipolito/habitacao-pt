@@ -47,21 +47,6 @@
             },
             {
               "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_geografia"
-                    }
-                  },
-                  "Property": "nome_nuts3"
-                }
-              },
-              "queryRef": "dim_geografia.nome_nuts3",
-              "nativeQueryRef": "nome_nuts3",
-              "displayName": "NUTS III"
-            },
-            {
-              "field": {
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
@@ -73,7 +58,7 @@
               },
               "queryRef": "_Medidas.Preço fiável há 12 meses €/m²",
               "nativeQueryRef": "Preço fiável há 12 meses €/m²",
-              "displayName": "Preço há 12 meses €/m²"
+              "displayName": "Há 12 meses €/m²"
             },
             {
               "field": {
