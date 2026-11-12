@@ -2,10 +2,10 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "047c4b08da20bc529d09",
   "position": {
-    "x": 1243.2370729153031,
+    "x": 1243.237072915303,
     "y": 220.77863594711351,
     "z": 11001,
-    "height": 859.58895143343375,
+    "height": 859.5889514334337,
     "width": 637.000654535934,
     "tabOrder": 11001
   },
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "_Medidas.Ranking variação",
-              "nativeQueryRef": "Ranking variação"
+              "nativeQueryRef": "Ranking variação",
+              "displayName": "Posição"
             },
             {
               "field": {
@@ -41,7 +42,8 @@
                 }
               },
               "queryRef": "dim_geografia.nome_geo",
-              "nativeQueryRef": "nome_geo"
+              "nativeQueryRef": "nome_geo",
+              "displayName": "Município"
             },
             {
               "field": {
@@ -55,7 +57,8 @@
                 }
               },
               "queryRef": "dim_geografia.nome_nuts3",
-              "nativeQueryRef": "nome_nuts3"
+              "nativeQueryRef": "nome_nuts3",
+              "displayName": "NUTS III"
             },
             {
               "field": {
@@ -69,7 +72,8 @@
                 }
               },
               "queryRef": "_Medidas.Preço fiável há 12 meses €/m²",
-              "nativeQueryRef": "Preço fiável há 12 meses €/m²"
+              "nativeQueryRef": "Preço fiável há 12 meses €/m²",
+              "displayName": "Preço há 12 meses €/m²"
             },
             {
               "field": {
@@ -83,7 +87,8 @@
                 }
               },
               "queryRef": "_Medidas.Preço fiável último mês €/m²",
-              "nativeQueryRef": "Preço fiável último mês €/m²"
+              "nativeQueryRef": "Preço fiável último mês €/m²",
+              "displayName": "Preço €/m²"
             },
             {
               "field": {
@@ -97,7 +102,8 @@
                 }
               },
               "queryRef": "_Medidas.Variação homóloga fiável",
-              "nativeQueryRef": "Variação homóloga fiável"
+              "nativeQueryRef": "Variação homóloga fiável",
+              "displayName": "Variação homóloga"
             },
             {
               "field": {
@@ -111,7 +117,8 @@
                 }
               },
               "queryRef": "_Medidas.Avaliações último mês",
-              "nativeQueryRef": "Avaliações último mês"
+              "nativeQueryRef": "Avaliações último mês",
+              "displayName": "Avaliações"
             }
           ]
         }
@@ -157,7 +164,22 @@
         }
       ]
     },
-    "drillFilterOtherVisuals": true
+    "drillFilterOtherVisuals": true,
+    "objects": {
+      "total": [
+        {
+          "properties": {
+            "totals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
   },
   "filterConfig": {
     "filters": [

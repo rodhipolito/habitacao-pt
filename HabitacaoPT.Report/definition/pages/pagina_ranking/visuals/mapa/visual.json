@@ -5,8 +5,8 @@
     "x": 39.812540908495876,
     "y": 220.77863594711351,
     "z": 9000,
-    "height": 859.58895143343375,
-    "width": 620.71370598245846,
+    "height": 859.5889514334337,
+    "width": 620.7137059824585,
     "tabOrder": 9000
   },
   "visual": {
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "dim_geografia.nome_geo",
-              "nativeQueryRef": "nome_geo"
+              "nativeQueryRef": "nome_geo",
+              "displayName": "Município"
             }
           ]
         },
@@ -45,7 +46,8 @@
                 }
               },
               "queryRef": "_Medidas.Preço fiável último mês €/m²",
-              "nativeQueryRef": "Preço fiável último mês €/m²"
+              "nativeQueryRef": "Preço fiável último mês €/m²",
+              "displayName": "Preço €/m²"
             },
             {
               "field": {
@@ -59,7 +61,8 @@
                 }
               },
               "queryRef": "_Medidas.Ranking variação",
-              "nativeQueryRef": "Ranking variação"
+              "nativeQueryRef": "Ranking variação",
+              "displayName": "Posição"
             }
           ]
         },
@@ -77,7 +80,8 @@
                 }
               },
               "queryRef": "_Medidas.Variação homóloga fiável",
-              "nativeQueryRef": "Variação homóloga fiável"
+              "nativeQueryRef": "Variação homóloga fiável",
+              "displayName": "Variação homóloga"
             }
           ]
         }

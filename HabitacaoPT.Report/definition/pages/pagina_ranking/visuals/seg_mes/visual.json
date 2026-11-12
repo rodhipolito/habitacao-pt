@@ -28,7 +28,8 @@
               },
               "queryRef": "dim_tempo.ano_mes",
               "nativeQueryRef": "ano_mes",
-              "active": true
+              "active": true,
+              "displayName": "Mês de referência"
             }
           ]
         }

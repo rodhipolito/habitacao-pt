@@ -4,10 +4,10 @@ table dim_tempo
 
 	column mes
 		dataType: dateTime
+		isKey
 		formatString: mmm yyyy
 		lineageTag: fba3d6bd-20fd-43c8-a5cd-25aaaef0a932
 		summarizeBy: none
-		isKey
 		sourceColumn: mes
 
 		annotation UnderlyingDateTimeDataType = Date

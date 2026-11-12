@@ -6,7 +6,7 @@
     "y": 222.58829689749967,
     "z": 10000,
     "height": 399.93507003534495,
-    "width": 559.18523366932845,
+    "width": 559.1852336693285,
     "tabOrder": 10000
   },
   "visual": {
@@ -28,7 +28,8 @@
               },
               "queryRef": "dim_geografia.nome_geo",
               "nativeQueryRef": "nome_geo",
-              "active": true
+              "active": true,
+              "displayName": "Município"
             }
           ]
         },
@@ -46,7 +47,8 @@
                 }
               },
               "queryRef": "_Medidas.Variação homóloga fiável",
-              "nativeQueryRef": "Variação homóloga fiável"
+              "nativeQueryRef": "Variação homóloga fiável",
+              "displayName": "Variação homóloga"
             }
           ]
         }
@@ -82,6 +84,32 @@
             }
           }
         }
+      ],
+      "categoryAxis": [
+        {
+          "properties": {
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "valueAxis": [
+        {
+          "properties": {
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
       ]
     },
     "visualContainerObjects": {
@@ -99,6 +127,19 @@
               "expr": {
                 "Literal": {
                   "Value": "'Maiores subidas (top 15)'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

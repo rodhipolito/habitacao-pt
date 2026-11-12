@@ -28,7 +28,8 @@
               },
               "queryRef": "dim_geografia.nome_nuts2",
               "nativeQueryRef": "nome_nuts2",
-              "active": true
+              "active": true,
+              "displayName": "Região (NUTS II)"
             }
           ]
         }
